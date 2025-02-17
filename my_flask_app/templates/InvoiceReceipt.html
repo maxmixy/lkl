@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body class="bg-gray-200 p-4">
+    <div class="max-w-4xl mx-auto bg-white border border-gray-400 rounded-lg shadow-lg">
+        <div class="bg-blue-600 text-white p-2 rounded-t-lg flex justify-between items-center">
+            <h1 class="text-lg">Receipt</h1>
+            <div class="flex space-x-4">
+                <a href="{{ url_for('main') }}" class="bg-blue-700 px-4 py-1 rounded">Main</a>
+                <a href="{{ url_for('list') }}" class="bg-blue-700 px-4 py-1 rounded">List</a>
+            </div>
+        </div>
+        <div class="p-4">
+            <div class="flex justify-between mb-4">
+                <div>
+                    <label for="receiptNo" class="block text-gray-700">Receipt No:</label>
+                    <input type="text" id="receiptNo" value="{{ receipt_no }}" class="border border-gray-400 rounded p-1 w-40">
+                </div>
+                <div>
+                    <label for="date" class="block text-gray-700">Date:</label>
+                    <input type="text" id="date" value="{{ date }}" class="border border-gray-400 rounded p-1 w-40">
+                </div>
+            </div>
+            <div class="bg-blue-600 text-white p-2 rounded-t-lg">Customer Information</div>
+            <div class="border border-gray-400 rounded-b-lg p-4 mb-4">
+                <div class="mb-4">
+                    <label for="customer" class="block text-gray-700">Customer:</label>
+                    <div class="flex items-center">
+                        <input type="text" id="customer" value="{{ customer_id }}" class="border border-gray-400 rounded p-1 w-40">
+                        <input type="text" value="{{ customer_name }}" class="border border-gray-400 rounded p-1 w-full ml-2" disabled>
+                    </div>
+                </div>
+                <div>
+                    <label for="remarks" class="block text-gray-700">Remarks:</label>
+                    <input type="text" id="remarks" value="{{ remarks }}" class="border border-gray-400 rounded p-1 w-full">
+                </div>
+            </div>
+            <div class="bg-blue-600 text-white p-2 rounded-t-lg">Details</div>
+            <div class="border border-gray-400 rounded-b-lg p-4">
+                <div class="overflow-x-auto mb-4">
+                    <table class="min-w-full border border-gray-400">
+                        <thead>
+                            <tr class="bg-gray-200">
+                                <th class="border border-gray-400 p-2">Invoice No.</th>
+                                <th class="border border-gray-400 p-2">Date</th>
+                                <th class="border border-gray-400 p-2">Balance</th>
+                                <th class="border border-gray-400 p-2">Applied</th>
+                                <th class="border border-gray-400 p-2">EWT</th>
+                                <th class="border border-gray-400 p-2">EVAT</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in items %}
+                            <tr>
+                                <td class="border border-gray-400 p-2">{{ item.invoice_no }}</td>
+                                <td class="border border-gray-400 p-2">{{ item.date }}</td>
+                                <td class="border border-gray-400 p-2">{{ item.balance }}</td>
+                                <td class="border border-gray-400 p-2">{{ item.applied }}</td>
+                                <td class="border border-gray-400 p-2">{{ item.ewt }}</td>
+                                <td class="border border-gray-400 p-2">{{ item.evat }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span>Invoice Amt</span>
+                            <input type="text" value="{{ invoice_amt }}" class="border border-gray-400 rounded p-1 w-32" disabled>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span>Applied Amt</span>
+                            <input type="text" value="{{ applied_amt }}" class="border border-gray-400 rounded p-1 w-32" disabled>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span>To Apply</span>
+                            <input type="text" class="border border-gray-400 rounded p-1 w-32">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span>Check</span>
+                            <input type="text" value="{{ check_amt }}" class="border border-gray-400 rounded p-1 w-32">
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span>Cash</span>
+                            <input type="text" class="border border-gray-400 rounded p-1 w-32">
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span>EWT</span>
+                            <input type="text" class="border border-gray-400 rounded p-1 w-32">
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span>EVAT</span>
+                            <input type="text" class="border border-gray-400 rounded p-1 w-32">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bg-gray-300 text-gray-700 p-2 rounded-b-lg text-center">
+            Record: {{ record_count }}
+        </div>
+    </div>
+</body>
+</html>

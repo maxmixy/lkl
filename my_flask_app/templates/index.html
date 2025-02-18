@@ -4,19 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Main Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            display: flex;
-        }
-        
         .sidebar {
             width: 200px;
             background-color: #f4f4f4;
             padding: 20px;
-            height: 100vh;
+            height: 95vh;
             box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
         }
         
         .sidebar a {
@@ -34,21 +31,31 @@
         }
         
         .content {
-            flex: 1;
             padding: 20px;
+            margin-left: 20px;
+            min-height: 95vh;
         }
     </style>
+
 </head>
-<body>
-    <div class="sidebar">
+<body class="bg-gray-200 p-4">
+
+    <div class="flex">
+        <div class="sidebar">
+
         <a href="/">Home</a>
         <a href="/invoice">Invoice</a>
         <a href="/receipt">Receipt</a>
     </div>
     
-    <div class="content">
-        <h1>Welcome to the Main Page</h1>
-        <p>This is the main content area.</p>
+        
+        <div class="content flex-1">
+            <div class="bg-white border border-gray-300 rounded-md shadow-md p-4 max-w-4xl mx-auto">
+
+                <h1 class="text-lg font-bold">Welcome to the Main Page</h1>
+                <p class="mt-2">This is the main content area.</p>
+            </div>
+        </div>
     </div>
 </body>
 </html>

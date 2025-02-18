@@ -5,190 +5,221 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invoice Form</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .sidebar {
+            width: 200px;
+            background-color: #f4f4f4;
+            padding: 20px;
+            height: 95vh;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        
+        .sidebar a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: #333;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        .sidebar a:hover {
+            background-color: #ddd;
+        }
+        
+        .content {
+            flex: 1;
+            padding: 20px;
+        }
+    </style>
 </head>
 <body class="bg-gray-200 p-4">
-    <div class="bg-white border border-gray-300 rounded-md shadow-md p-4 max-w-4xl mx-auto">
-        <div class="flex justify-between items-center mb-4">
-            <h1 class="text-lg font-bold">Invoice Form</h1>
-            <div class="flex space-x-4">
-                <form method="GET" action="{{ url_for('views.invoice') }}" class="flex items-center">
-                    <input type="text" name="group_no" placeholder="Enter Group Number" 
-                           class="border border-gray-300 p-2 rounded-md mr-2" value="{{ request.args.get('group_no', '') }}">
-                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md">Search Group</button>
+    <div class="flex">
+        <div class="sidebar">
 
-                </form>
-            </div>
+        <a href="/">Home</a>
+        <a href="/invoice">Invoice</a>
+        <a href="/receipt">Receipt</a>
         </div>
 
-        <form action="{{ url_for('views.submit_invoice') }}" method="POST">
-            <div class="grid grid-cols-3 gap-4 mb-4">
-                <div>
-                    <label class="block text-sm font-medium">Invoice ID</label>
-                    <input type="text" name="InvoiceID" class="border border-gray-300 w-full p-2" 
-                           value="{{ invoice_id if invoice_id else '' }}">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium">Date</label>
-                    <input type="text" name="InvDate" class="border border-gray-300 w-full p-2" 
-                           value="{{ inv_date if inv_date else '' }}">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium">Invoice Type</label>
-                    <input type="text" name="InvType" class="border border-gray-300 w-full p-2" 
-                           value="{{ inv_type if inv_type else '' }}">
+        
+        <div class="content flex-1">
+
+        <div class="bg-white border border-gray-300 rounded-md shadow-md p-4 max-w-4xl mx-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h1 class="text-lg font-bold">Invoice Form</h1>
+                <div class="flex space-x-4">
+                    <form method="GET" action="{{ url_for('views.invoice') }}" class="flex items-center">
+                        <input type="text" name="group_no" placeholder="Enter Group Number" 
+                               class="border border-gray-300 p-2 rounded-md mr-2" value="{{ request.args.get('group_no', '') }}">
+                        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md">Search Group</button>
+                    </form>
                 </div>
             </div>
 
-            <div class="border border-gray-300 p-4 mb-4">
+            <form action="{{ url_for('views.submit_invoice') }}" method="POST">
                 <div class="grid grid-cols-3 gap-4 mb-4">
                     <div>
-                        <label class="block text-sm font-medium">Project ID</label>
-                        <input type="text" name="ProjID" class="border border-gray-300 w-full p-2" 
-                               value="{{ proj_id if proj_id else '' }}">
+                        <label class="block text-sm font-medium">Invoice ID</label>
+                        <input type="text" name="InvoiceID" class="border border-gray-300 w-full p-2" 
+                               value="{{ invoice_id if invoice_id else '' }}">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium">Customer ID</label>
-                        <input type="text" name="CustomerID" class="border border-gray-300 w-full p-2" 
-                               value="{{ customer_id if customer_id else '' }}">
+                        <label class="block text-sm font-medium">Date</label>
+                        <input type="text" name="InvDate" class="border border-gray-300 w-full p-2" 
+                               value="{{ inv_date if inv_date else '' }}">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium">Account Manager ID</label>
-                        <input type="text" name="AccManID" class="border border-gray-300 w-full p-2" 
-                               value="{{ acc_man_id if acc_man_id else '' }}">
+                        <label class="block text-sm font-medium">Invoice Type</label>
+                        <input type="text" name="InvType" class="border border-gray-300 w-full p-2" 
+                               value="{{ inv_type if inv_type else '' }}">
                     </div>
                 </div>
 
-                <div class="grid grid-cols-3 gap-4 mb-4">
-                    <div>
-                        <label class="block text-sm font-medium">Lead Division</label>
-                        <input type="text" name="LeadDiv" class="border border-gray-300 w-full p-2" 
-                               value="{{ lead_div if lead_div else '' }}">
+                <div class="border border-gray-300 p-4 mb-4">
+                    <div class="grid grid-cols-3 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium">Project ID</label>
+                            <input type="text" name="ProjID" class="border border-gray-300 w-full p-2" 
+                                   value="{{ proj_id if proj_id else '' }}">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium">Customer ID</label>
+                            <input type="text" name="CustomerID" class="border border-gray-300 w-full p-2" 
+                                   value="{{ customer_id if customer_id else '' }}">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium">Account Manager ID</label>
+                            <input type="text" name="AccManID" class="border border-gray-300 w-full p-2" 
+                                   value="{{ acc_man_id if acc_man_id else '' }}">
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium">Remarks</label>
-                        <input type="text" name="Remarks" class="border border-gray-300 w-full p-2" 
-                               value="{{ remarks if remarks else '' }}">
+
+                    <div class="grid grid-cols-3 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium">Lead Division</label>
+                            <input type="text" name="LeadDiv" class="border border-gray-300 w-full p-2" 
+                                   value="{{ lead_div if lead_div else '' }}">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium">Remarks</label>
+                            <input type="text" name="Remarks" class="border border-gray-300 w-full p-2" 
+                                   value="{{ remarks if remarks else '' }}">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium">Internal Terms</label>
+                            <input type="text" name="IntTerms" class="border border-gray-300 w-full p-2" 
+                                   value="{{ int_terms if int_terms else '' }}">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium">Customer Terms</label>
+                            <input type="text" name="CusTerms" class="border border-gray-300 w-full p-2" 
+                                   value="{{ cus_terms if cus_terms else '' }}">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium">Payment Type</label>
+                            <input type="text" name="PaymentType" class="border border-gray-300 w-full p-2" 
+                                   value="{{ payment_type if payment_type else '' }}">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="border border-gray-300 p-4 mb-4">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-gray-200">
+                                <th class="border border-gray-300 p-2">Item ID</th>
+                                <th class="border border-gray-300 p-2">Description</th>
+                                <th class="border border-gray-300 p-2">Accepted</th>
+                                <th class="border border-gray-300 p-2">Gross</th>
+                                <th class="border border-gray-300 p-2">Billed</th>
+                                <th class="border border-gray-300 p-2">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in items %}
+                            <tr>
+                                    <td class="border border-gray-300 p-2">{{ item.ItemID }}</td>
+                                    <td class="border border-gray-300 p-2">{{ item.Description }}</td>
+                                    <td class="border border-gray-300 p-2">{{ item.Accepted }}</td>
+                                    <td class="border border-gray-300 p-2">{{ item.Gross }}</td>
+                                    <td class="border border-gray-300 p-2">{{ item.Billed }}</td>
+                                    <td class="border border-gray-300 p-2">{{ item.Amount }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="border border-gray-300 p-4 mb-4">
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium">TPC Contact</label>
+                            <input type="text" name="TPCContact" class="border border-gray-300 w-full p-2" 
+                                   value="{{ tpc_contact if tpc_contact else '' }}">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium">TPC Gross</label>
+                            <input type="text" name="TPCGross" class="border border-gray-300 w-full p-2" 
+                                   value="{{ tpc_gross if tpc_gross else '' }}">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-4 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium">Gross</label>
+                            <input type="text" name="Gross" class="border border-gray-300 w-full p-2" 
+                                   value="{{ gross if gross is not none else 0 }}">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium">Debit</label>
+                            <input type="text" name="Debit" class="border border-gray-300 w-full p-2" 
+                                   value="{{ debit if debit is not none else 0 }}">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium">Returns</label>
+                            <input type="text" name="Returns" class="border border-gray-300 w-full p-2" 
+                                   value="{{ returns if returns is not none else 0 }}">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium">Credit</label>
+                            <input type="text" name="Credit" class="border border-gray-300 w-full p-2" 
+                                   value="{{ credit if credit is not none else 0 }}">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium">Payment</label>
+                            <input type="text" name="Payment" class="border border-gray-300 w-full p-2" 
+                                   value="{{ payment if payment is not none else 0 }}">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium">Balance</label>
+                            <input type="text" name="Balance" class="border border-gray-300 w-full p-2" 
+                                   value="{{ balance if balance is not none else 0 }}">
+                        </div>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-3 gap-4 mb-4">
-                    <div>
-                        <label class="block text-sm font-medium">Internal Terms</label>
-                        <input type="text" name="IntTerms" class="border border-gray-300 w-full p-2" 
-                               value="{{ int_terms if int_terms else '' }}">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium">Customer Terms</label>
-                        <input type="text" name="CusTerms" class="border border-gray-300 w-full p-2" 
-                               value="{{ cus_terms if cus_terms else '' }}">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium">Payment Type</label>
-                        <input type="text" name="PaymentType" class="border border-gray-300 w-full p-2" 
-                               value="{{ payment_type if payment_type else '' }}">
-                    </div>
+                <div class="flex justify-between mt-4">
+                    {% if current_index > 0 %}
+                    <a href="{{ url_for('views.invoice', group_no=request.args.get('group_no'), invoice_no=invoices[current_index - 1].InvoiceID) }}"
+                       class="bg-gray-600 text-white px-4 py-2 rounded-md">Previous</a>
+                    {% endif %}
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md">Submit</button>
+                    {% if current_index < invoices|length - 1 %}
+                    <a href="{{ url_for('views.invoice', group_no=request.args.get('group_no'), invoice_no=invoices[current_index + 1].InvoiceID) }}"
+                       class="bg-gray-600 text-white px-4 py-2 rounded-md">Next</a>
+                    {% endif %}
                 </div>
-            </div>
-            
-            <div class="border border-gray-300 p-4 mb-4">
-                <table class="w-full text-sm">
-                    <thead>
-                        <tr class="bg-gray-200">
-                            <th class="border border-gray-300 p-2">Item ID</th>
-                            <th class="border border-gray-300 p-2">Description</th>
-                            <th class="border border-gray-300 p-2">Accepted</th>
-                            <th class="border border-gray-300 p-2">Gross</th>
-                            <th class="border border-gray-300 p-2">Billed</th>
-                            <th class="border border-gray-300 p-2">Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for item in items %}
-                        <tr>
-                                <td class="border border-gray-300 p-2">{{ item.ItemID }}</td>
-                                <td class="border border-gray-300 p-2">{{ item.Description }}</td>
-                                <td class="border border-gray-300 p-2">{{ item.Accepted }}</td>
-                                <td class="border border-gray-300 p-2">{{ item.Gross }}</td>
-                                <td class="border border-gray-300 p-2">{{ item.Billed }}</td>
-                                <td class="border border-gray-300 p-2">{{ item.Amount }}</td>
-
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="border border-gray-300 p-4 mb-4">
-                <div class="grid grid-cols-2 gap-4 mb-4">
-                    <div>
-                        <label class="block text-sm font-medium">TPC Contact</label>
-                        <input type="text" name="TPCContact" class="border border-gray-300 w-full p-2" 
-                               value="{{ tpc_contact if tpc_contact else '' }}">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium">TPC Gross</label>
-                        <input type="text" name="TPCGross" class="border border-gray-300 w-full p-2" 
-                               value="{{ tpc_gross if tpc_gross else '' }}">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-4 gap-4 mb-4">
-                    <div>
-                        <label class="block text-sm font-medium">Gross</label>
-                        <input type="text" name="Gross" class="border border-gray-300 w-full p-2" 
-                               value="{{ gross if gross is not none else 0 }}">
-
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium">Debit</label>
-                        <input type="text" name="Debit" class="border border-gray-300 w-full p-2" 
-                               value="{{ debit if debit is not none else 0 }}">
-
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium">Returns</label>
-                        <input type="text" name="Returns" class="border border-gray-300 w-full p-2" 
-                               value="{{ returns if returns is not none else 0 }}">
-
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium">Credit</label>
-                        <input type="text" name="Credit" class="border border-gray-300 w-full p-2" 
-                               value="{{ credit if credit is not none else 0 }}">
-
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4 mb-4">
-                    <div>
-                        <label class="block text-sm font-medium">Payment</label>
-                        <input type="text" name="Payment" class="border border-gray-300 w-full p-2" 
-                               value="{{ payment if payment is not none else 0 }}">
-
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium">Balance</label>
-                        <input type="text" name="Balance" class="border border-gray-300 w-full p-2" 
-                               value="{{ balance if balance is not none else 0 }}">
-
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex justify-between mt-4">
-                {% if current_index > 0 %}
-                <a href="{{ url_for('views.invoice', group_no=request.args.get('group_no'), invoice_no=invoices[current_index - 1].InvoiceID) }}"
-                   class="bg-gray-600 text-white px-4 py-2 rounded-md">Previous</a>
-                {% endif %}
-                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md">Submit</button>
-                {% if current_index < invoices|length - 1 %}
-                <a href="{{ url_for('views.invoice', group_no=request.args.get('group_no'), invoice_no=invoices[current_index + 1].InvoiceID) }}"
-
-                   class="bg-gray-600 text-white px-4 py-2 rounded-md">Next</a>
-                {% endif %}
-            </div>
-
-        </form>
+            </form>
+        </div>
+    </div>
     </div>
 </body>
 </html>

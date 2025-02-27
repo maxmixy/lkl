@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales and Collection</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .content {
+            padding: 20px;
+            margin-top: -30px;
+        }
+        .tab {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 10px;
+            background: white;
+        }
+        .tab.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .sidebar {
+            width: 200px;
+            background-color: #f4f4f4;
+            padding: 20px;
+            height: 100vh;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        .sidebar a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: #333;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .sidebar a:hover {
+            background-color: #ddd;
+        }
+        .content {
+            flex: 1;
+            padding: 20px;
+        }
+    </style>
+    <script>
+        function showTab(tabId) {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.getElementById(tabId).classList.add('active');
+        }
+    </script>
+</head>
+<body class="bg-gray-200">
+    <div class="flex">
+        <div class="sidebar">
+            {% include 'tabs.html' %}
+        </div>
+
+        <div class="sidebar">
+            <h1 class="text-lg font-bold">Sales and Collection</h1>
+            <div class="mt-4">
+                <a onclick="showTab('invoiceTab')" >Invoice</button>
+                <a onclick="showTab('receiptTab')" >Receipt</button>
+            </div>
+        </div>
+        <div class="content flex-1">
+            <div id="invoiceTab" class="tab active">
+                <h2 class="text-md font-semibold mb-4">Invoice</h2>
+                {% include 'InvoiceForm.html' %}
+            </div>
+            <div id="receiptTab" class="tab">
+                <h2 class="text-md font-semibold mb-4">Receipt</h2>
+                {% include 'InvoiceReceipt.html' %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

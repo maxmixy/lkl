@@ -12,53 +12,70 @@
         <div class="p-4">
             <form action="{{ url_for('views.purchasing') }}" method="POST">
                 
-                <div class="grid grid-cols-3 gap-4 mb-4">
+                <div class="grid grid-cols-2 gap-4 mb-4">
                     <div class="mb-4">
-                        <label for="request_id" class="block text-gray-700">Request ID:</label>
+                        <label for="request_id" class="block text-gray-700">Order No.</label>
                         <input type="text" id="request_id" name="request_id" class="border border-gray-400 rounded p-1 w-full" required>
                     </div>
                     <div class="mb-4">
                         <label for="date" class="block text-gray-700">Date:</label>
                         <input type="date" id="date" name="date" class="border border-gray-400 rounded p-1 w-full" required>
                     </div>
-                    <div class="mb-4">
-                        <label for="type" class="block text-gray-700">Type:</label>
-                        <input type="type" id="type" name="type" class="border border-gray-400 rounded p-1 w-full" required>
-                    </div>
                 </div>
                 <div>
-                    <h1 class="text-lg">Purchase Request Information</h1>
-                    <div class="mb-4">
-                        <label for="ref_no" class="block text-gray-700">Reference No.</label>
-                        <input type="text" id="supplier_name" name="supplier_name" class="border border-gray-400 rounded p-1 w-full" required>
+                    <h1 class="text-lg">Purchase Order Information</h1>
+                    <div class="grid grid-cols-3 gap-4 mb-4">
+                        <div class="mb-4">
+                            <label for="type" class="block text-gray-700">Type</label>
+                            <input type="text" id="type" name="type" class="border border-gray-400 rounded p-1 w-full" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="type" class="block text-gray-700">Product Type</label>
+                            <input type="text" id="type" name="type" class="border border-gray-400 rounded p-1 w-full" required>
+                        </div>
+                        
                     </div>
-                    <div class="mb-4">
-                        <label for="requestor" class="block text-gray-700">Requested by</label>
-                        <input type="text" id="item_description" name="item_description" class="border border-gray-400 rounded p-1 w-full" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="quantity" class="block text-gray-700">Department</label>
-                        <input type="number" id="quantity" name="quantity" class="border border-gray-400 rounded p-1 w-full" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="unit_price" class="block text-gray-700">Purpose</label>
-                        <input type="number" id="unit_price" name="unit_price" class="border border-gray-400 rounded p-1 w-full" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="total_price" class="block text-gray-700">Remarks</label>
-                        <input type="number" id="total_price" name="total_price" class="border border-gray-400 rounded p-1 w-full" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="status" class="block text-gray-700">Date Needed</label>
-                        <select id="status" name="status" class="border border-gray-400 rounded p-1 w-full">
-                            <option value="Pending">Pending</option>
-                            <option value="Approved">Approved</option>
-                            <option value="Rejected">Rejected</option>
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <label for="remarks" class="block text-gray-700">Remarks:</label>
-                        <textarea id="remarks" name="remarks" class="border border-gray-400 rounded p-1 w-full"></textarea>
+                    <div class="grid grid-cols-3 gap-4 mb-4">
+                        <div class="col-span-2 mb-4">
+                            <label for="requestor" class="block text-gray-700">Supplier</label>
+                            <input type="text" id="item_description" name="item_description" class="border border-gray-400 rounded p-1 w-full" required>
+                        </div>
+                        <div class="col-start-3 mb-4">
+                            <label for="terms" class="block text-gray-700">Terms</label>
+                            <select id="terms" name="terms" class="border border-gray-400 rounded p-1 w-full">
+                                <option value="1">Immediate</option>
+                                <option value="30">30 Days</option>
+                                <option value="60">60 Days</option>
+                            </select>
+                        </div>
+                        <div class="col-span-2 mb-4">
+                            <label for="quantity" class="block text-gray-700">Address</label>
+                            <input type="number" id="quantity" name="quantity" class="border border-gray-400 rounded p-1 w-full" required>
+                        </div>
+                        <div class="col-start-3 row-start-2 mb-4">
+                            <label for="currency" class="block text-gray-700">Currency</label>
+                            <select id="currency" name="currency" class="border border-gray-400 rounded p-1 w-full">
+                                <option value="Php">Peso</option>
+                                <option value="Usd">Dollar</option>
+                                <option value="Cny">Yuan</option>
+                            </select>
+                        </div>
+                        <div class="col-span-2 mb-4">
+                            <label for="unit_price" class="block text-gray-700">Attention</label>
+                            <input type="number" id="unit_price" name="unit_price" class="border border-gray-400 rounded p-1 w-full" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="remarks" class="block text-gray-700">Currency Rate:</label>
+                            <input id="remarks" name="remarks" class="border border-gray-400 rounded p-1 w-full"></input>
+                        </div>
+                        <div class="col-span-2 mb-4">
+                            <label for="delivery_instructions" class="block text-gray-700">Delivery Instruction</label>
+                            <textarea id="delivery_instructions" name="delivery_instructions" class="border border-gray-400 rounded p-1 w-full"></textarea>
+                        </div>
+                        <div class="col-span-2 mb-4">
+                            <label for="remarks" class="block text-gray-700">Remarks:</label>
+                            <textarea id="remarks" name="remarks" class="border border-gray-400 rounded p-1 w-full"></textarea>
+                        </div>
                     </div>
                 </div>
                 

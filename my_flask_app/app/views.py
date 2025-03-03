@@ -157,3 +157,11 @@ def sales_and_collection():
 
     return render_template('SalesAndCollection.html', current_index=current_index, invoices=invoices)
 
+
+@views.route('/purchasing')
+def purchasing():
+    return render_template('Purchasing.html')
+
+@views.route('/disbursement')
+def disbursement():
+    return render_template('Disbursement.html')

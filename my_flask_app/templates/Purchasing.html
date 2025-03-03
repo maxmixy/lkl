@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales and Collection</title>
+    <title>Purchasing</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .content {
@@ -67,21 +67,24 @@
         </div>
 
         <div class="sidebar">
-            <h1 class="text-lg font-bold">Sales and Collection</h1>
+            <h1 class="text-lg font-bold">Purchasing</h1>
             <div class="mt-4">
-                <a onclick="showTab('invoiceTab')" >Invoice</a>
-                <a onclick="showTab('receiptTab')" >Receipt</a>
-
+                <a onclick="showTab('Request')" >Request Purchase</a>
+                <a onclick="showTab('Order')" >Purchase Order</a>
+                <a onclick="showTab('Receiving')" >Purchase Receiving</a>
             </div>
         </div>
         <div class="content flex-1">
-            <div id="invoiceTab" class="tab active">
-                <h2 class="text-md font-semibold mb-4">Invoice</h2>
-                {% include 'InvoiceForm.html' %}
+            <div id="Request" class="tab active">
+                <h2 class="text-md font-semibold mb-4">Request Purchase</h2>
+                {% include 'PurchaseRequests.html' %}
             </div>
-            <div id="receiptTab" class="tab">
-                <h2 class="text-md font-semibold mb-4">Receipt</h2>
-                {% include 'InvoiceReceipt.html' %}
+            <div id="Order" class="tab">
+                <h2 class="text-md font-semibold mb-4">Purchase Order</h2>
+                {% include 'PurchaseOrder.html' %}
+            </div>
+            <div id="Receiving" class="tab">
+                <h2 class="text-md font-semibold mb-4">Receiving Report</h2>
             </div>
         </div>
     </div>

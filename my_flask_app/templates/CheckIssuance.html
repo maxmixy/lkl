@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Issuance</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-200 p-4">
+    <div class="max-w-4xl mx-auto bg-white border border-gray-400 rounded-lg shadow-lg">
+        <div class="p-4">
+            <h1 class="text-lg font-bold">Check Issuance</h1>
+            <form action="" method="POST">
+                <div class="grid grid-cols-2">
+                    <div class="mb-4">
+                        <label for="check_number" class="block text-gray-700">Company Code:</label>
+                        <input type="text" id="check_number" name="check_number" class="border border-gray-400 rounded p-1 w-full" required>
+                    </div>
+                    <div></div>
+                </div>
+                
+                <h1 class="text-lg">Check Issuance Information</h1>
+                <div class="grid grid-cols-3">
+                    <div></div><div></div>
+                    <div class="mb-4">
+                        <label for="date_cleared" class="block text-gray-700">Date:</label>
+                        <input type="date" id="date_cleared" name="date_cleared" class="border border-gray-400 rounded p-1 w-full" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="date_cleared" class="block text-gray-700">Bank:</label>
+                        <input type="text" id="date_cleared" name="date_cleared" class="border border-gray-400 rounded p-1 w-full" required>
+                    </div>
+                    <div class="col-span-2">
+                        <label for="account_no" class="block text-gray-700" style="visibility: hidden;">asd</label>                      
+                        <input type="text" id="account_no" name="account_no" class="border border-gray-400 rounded p-1 w-full" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="account_no" class="block text-gray-700">Check/CB No.:</label>
+                        <input type="text" id="account_no" name="account_no" class="border border-gray-400 rounded p-1 w-full" required>
+                    </div>
+                    <div>  
+                        <label for="account_no" class="block text-gray-700" style="visibility: hidden;">asd</label>                      
+                        <input type="text" id="account_no" name="account_no" class="border border-gray-400 rounded p-1 w-full" required>
+                    </div>
+                    <div>
+                        <label for="date_cleared" class="block text-gray-700">Check Date:</label>
+                        <input type="date" id="date_cleared" name="date_cleared" class="border border-gray-400 rounded p-1 w-full" required>
+                    </div>
+                    <div class="col-span-3 mb-4">
+                        <label for="account_no" class="block text-gray-700">Paid To:</label>
+                        <input type="text" id="account_no" name="account_no" class="border border-gray-400 rounded p-1 w-full" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="account_no" class="block text-gray-700">Account No.:</label>
+                        <input type="text" id="account_no" name="account_no" class="border border-gray-400 rounded p-1 w-full" required>
+                    </div><div></div>
+                    <div class="mb-4">
+                        <label for="account_no" class="block text-gray-700">Total Amount:</label>
+                        <input type="text" id="account_no" name="account_no" class="border border-gray-400 rounded p-1 w-full" required>
+                    </div>
+                    <div></div><div></div>
+                    <div class="mb-4">
+                        <label for="account_no" class="block text-gray-700">Total Applied:</label>
+                        <input type="text" id="account_no" name="account_no" class="border border-gray-400 rounded p-1 w-full" required>
+                    </div>
+                </div>
+                
+                <h1 class="text-lg">Details</h1>
+                    <div class="border border-gray-300 p-4 mb-4">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="bg-gray-200">
+                                    <th class="border border-gray-300 p-2">Voucher No.</th>
+                                    <th class="border border-gray-300 p-2">Date</th>
+                                    <th class="border border-gray-300 p-2">Voucher Amount</th>
+                                    <th class="border border-gray-300 p-2">Applied</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in items %}
+                                <tr>
+                                        <td class="border border-gray-300 p-2">{{ item.ItemID }}</td>
+                                        <td class="border border-gray-300 p-2">{{ item.Accepted }}</td>
+                                        <td class="border border-gray-300 p-2">{{ item.Gross }}</td>
+                                        <td class="border border-gray-300 p-2">{{ item.Billed }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        </div>
+            </form>
+            
+        </div>
+    </div>
+</body>
+</html>

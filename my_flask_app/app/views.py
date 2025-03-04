@@ -158,9 +158,16 @@ def sales_and_collection():
     return render_template('SalesAndCollection.html', current_index=current_index, invoices=invoices)
 
 
-@views.route('/purchasing')
+@views.route('/purchasing', methods=['GET', 'POST'])
 def purchasing():
+    if request.method == 'POST':
+        # Process form data here
+        form_data = request.form
+        # Add your form processing logic here
+        flash('Form submitted successfully!', 'success')
+        return redirect(url_for('views.purchasing'))
     return render_template('Purchasing.html')
+
 
 @views.route('/disbursement')
 def disbursement():

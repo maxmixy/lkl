@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Request</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";  
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";  
+            evt.currentTarget.className += " active";
+        }
+    </script>
+</head>
+<body class="bg-gray-200 p-4">
+    <div class="max-w-4xl mx-auto bg-white border border-gray-400 rounded-lg shadow-lg">
+        
+        <div class="p-4">
+            <form action="{{ url_for('views.purchasing') }}" method="POST">
+                
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div class="mb-4">
+                        <label for="request_id" class="block text-gray-700">Request ID:</label>
+                        <input type="text" id="request_id" name="request_id" class="border border-gray-400 rounded p-1 w-full" >
+                    </div>
+                    <div class="mb-4">
+                        <label for="date" class="block text-gray-700">Date:</label>
+                        <input type="date" id="date" name="date" class="border border-gray-400 rounded p-1 w-full" >
+                    </div>
+                </div>
+                
+                <h1 class="text-lg font-bold">Payment Request Information</h1>
+                <div class="mb-4">
+                    <label for="supplier" class="block text-gray-700">Supplier:</label>
+                    <input type="text" id="supplier" name="supplier" class="border border-gray-400 rounded p-1 w-full" required>
+                </div>
+                <div class="mb-4">
+                    <label for="department" class="block text-gray-700">Department:</label>
+                    <input type="text" id="department" name="department" class="border border-gray-400 rounded p-1 w-full" required>
+                </div>
+                <div class="mb-4">
+                    <label for="purpose" class="block text-gray-700">Purpose:</label>
+                    <input type="text" id="purpose" name="purpose" class="border border-gray-400 rounded p-1 w-full" required>
+                </div>
+                <div class="mb-4">
+                    <label for="remarks" class="block text-gray-700">Remarks:</label>
+                    <textarea id="remarks" name="remarks" class="border border-gray-400 rounded p-1 w-full"></textarea>
+                </div>
+                
+                <h2 class="text-lg font-bold">Details</h2>
+                <div class="mb-4">
+                    <div class="grid grid-cols-3 gap-2 mb-2">
+                        <button class="tablinks" onclick="openTab(event, 'OPEX')">OPEX</button>
+                        <button class="tablinks" onclick="openTab(event, 'Trade')">Trade</button>
+                        <button class="tablinks" onclick="openTab(event, 'Non-Trade')">Non-Trade</button>
+                    </div>
+
+                    <div id="OPEX" class="tabcontent" style="display: block;">
+                        <div class="border border-gray-300 p-4 mb-4">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="bg-gray-200">
+                                        <th class="border border-gray-300 p-2">Account No</th>
+                                        <th class="border border-gray-300 p-2">Title</th>
+                                        <th class="border border-gray-300 p-2">Description</th>
+                                        <th class="border border-gray-300 p-2">Debit</th>
+                                        <th class="border border-gray-300 p-2">Credit</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in items %}
+                                    <tr>
+                                        <td class="border border-gray-300 p-2">{{ item.ItemID }}</td>
+                                        <td class="border border-gray-300 p-2">{{ item.Description }}</td>
+                                        <td class="border border-gray-300 p-2">{{ item.Accepted }}</td>
+                                        <td class="border border-gray-300 p-2">{{ item.Gross }}</td>
+                                        <td class="border border-gray-300 p-2">{{ item.Billed }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="Trade" class="tabcontent" style="display: none;">
+                        <div class="border border-gray-300 p-4 mb-4">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="bg-gray-200">
+                                        <th class="border border-gray-300 p-2">WRR No</th>
+                                        <th class="border border-gray-300 p-2">Date</th>
+                                        <th class="border border-gray-300 p-2">Amount</th>
+                                        <th class="border border-gray-300 p-2">Applied Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in items %}
+                                    <tr>
+                                        <td class="border border-gray-300 p-2">{{ item.ItemID }}</td>
+                                        <td class="border border-gray-300 p-2">{{ item.Description }}</td>
+                                        <td class="border border-gray-300 p-2">{{ item.Accepted }}</td>
+                                        <td class="border border-gray-300 p-2">{{ item.Accepted }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="Non-Trade" class="tabcontent" style="display: none;">
+                        <div class="border border-gray-300 p-4 mb-4">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="bg-gray-200">
+                                        <th class="border border-gray-300 p-2">Payable</th>
+                                        <th class="border border-gray-300 p-2">Description</th>
+                                        <th class="border border-gray-300 p-2">Date</th>
+                                        <th class="border border-gray-300 p-2">Amount</th>
+                                        <th class="border border-gray-300 p-2">Applied Amount</th>
+                                        <th class="border border-gray-300 p-2">EWT</th>
+                                        <th class="border border-gray-300 p-2">EVAT</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in items %}
+                                    <tr>
+                                        <td class="border border-gray-300 p-2">{{ item.ItemID }}</td>
+                                        <td class="border border-gray-300 p-2">{{ item.Description }}</td>
+                                        <td class="border border-gray-300 p-2">{{ item.Accepted }}</td>
+                                        <td class="border border-gray-300 p-2">{{ item.ItemID }}</td>
+                                        <td class="border border-gray-300 p-2">{{ item.ItemID }}</td>
+                                        <td class="border border-gray-300 p-2">{{ item.ItemID }}</td>
+                                        <td class="border border-gray-300 p-2">{{ item.ItemID }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</body>
+</html>

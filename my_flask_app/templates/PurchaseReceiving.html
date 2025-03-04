@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase Receiving</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-200 p-4">
+    <div class="max-w-4xl mx-auto bg-white border border-gray-400 rounded-lg shadow-lg">
+        
+        <div class="p-4">
+            <h1 class="text-lg font-bold">Warehouse Receiving Report</h1>
+            <div class="main">
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div class="mb-4">
+                        <label for="transactionNo" class="block text-gray-700">Transaction No:</label>
+                        <input type="text" id="transactionNo" name="transactionNo" class="border border-gray-400 rounded p-1 w-full" value="RR-060001" readonly>
+                    </div>
+                    <div class="mb-4">
+                        <label for="date" class="block text-gray-700">Date:</label>
+                        <input type="date" id="date" name="date" class="border border-gray-400 rounded p-1 w-full" value="2006-01-04">
+                    </div>
+                </div>
+    
+                <h2 class="text-md font-semibold mb-4">Receiving Report Information</h2>
+                <div class="info-section">
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="mb-4">
+                            <label for="supplier" class="block text-gray-700">Supplier:</label>
+                            <input type="text" id="supplierCode" name="supplierCode" class="border border-gray-400 rounded p-1 w-full" value="E00001" readonly>
+                            <input type="text" id="supplierName" name="supplierName" class="border border-gray-400 rounded p-1 w-full" value="ECS CORPORATION" readonly>
+                        </div>
+                        <div class="mb-4">
+                            <label for="address" class="block text-gray-700">Address:</label>
+                            <input type="text" id="address" name="address" class="border border-gray-400 rounded p-1 w-full" value="42 LEGASPI ST., MAKATI CITY, PHILIPPINES" readonly>
+                        </div>
+                        <div class="mb-4">
+                            <label for="contact" class="block text-gray-700">Contact:</label>
+                            <input type="text" id="contact" name="contact" class="border border-gray-400 rounded p-1 w-full" value="RAMON CUIZA" readonly>
+                        </div>
+                        <div class="mb-4">
+                            <label for="profitCenter" class="block text-gray-700">Profit Center:</label>
+                            <input type="text" id="profitCenter" name="profitCenter" class="border border-gray-400 rounded p-1 w-full" value="COMMON" readonly>
+                        </div>
+                        <div class="mb-4">
+                            <label for="receivedBy" class="block text-gray-700">Received By:</label>
+                            <input type="text" id="receivedBy" name="receivedBy" class="border border-gray-400 rounded p-1 w-full" value="NORMAN DE GUZMAN" readonly>
+                        </div>
+                        <div class="mb-4">
+                            <label for="receivedDate" class="block text-gray-700">Received Date:</label>
+                            <input type="date" id="receivedDate" name="receivedDate" class="border border-gray-400 rounded p-1 w-full" value="2006-01-04">
+                        </div>
+                        <div class="mb-4">
+                            <label for="terms" class="block text-gray-700">Terms:</label>
+                            <input type="text" id="terms" name="terms" class="border border-gray-400 rounded p-1 w-full" value="30 days">
+                        </div>
+                        <div class="mb-4">
+                            <label for="taxType" class="block text-gray-700">Tax Type:</label>
+                            <input type="text" id="taxType" name="taxType" class="border border-gray-400 rounded p-1 w-full" value="12%">
+                        </div>
+                        <div class="mb-4">
+                            <label for="ewt" class="block text-gray-700">EWT:</label>
+                            <input type="text" id="ewt" name="ewt" class="border border-gray-400 rounded p-1 w-full" value="1.00">
+                        </div>
+                    </div>
+                </div>
+    
+                <h2 class="text-lg font-bold">Details</h2>
+                <table class="w-full text-sm border border-gray-300 mb-4">
+                    <thead>
+                        <tr class="bg-gray-200">
+                            <th class="border border-gray-300 p-2">Reference No</th>
+                            <th class="border border-gray-300 p-2">Product ID</th>
+                            <th class="border border-gray-300 p-2">Description</th>
+                            <th class="border border-gray-300 p-2">Warehouse Unit</th>
+                            <th class="border border-gray-300 p-2">Quantity</th>
+                            <th class="border border-gray-300 p-2">Price</th>
+                            <th class="border border-gray-300 p-2">Amount</th>
+                            <th class="border border-gray-300 p-2">Batch ID</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="border border-gray-300 p-2">PO-060001</td>
+                            <td class="border border-gray-300 p-2">OE-0001</td>
+                            <td class="border border-gray-300 p-2">COMPUTER SET (COMPATIBLE)</td>
+                            <td class="border border-gray-300 p-2">WH51</td>
+                            <td class="border border-gray-300 p-2">1.00</td>
+                            <td class="border border-gray-300 p-2">18,000.00</td>
+                            <td class="border border-gray-300 p-2">18,000.00</td>
+                            <td class="border border-gray-300 p-2"></td>
+                        </tr>
+                    </tbody>
+                </table>
+    
+                <div class="border border-gray-300 p-4 mb-4">
+                    <div class="field-group mb-4">
+                        <label for="gross" class="block text-gray-700">Gross:</label>
+                        <input type="text" id="gross" name="gross" class="border border-gray-400 rounded p-1 w-full" value="18,000.00">
+                    </div>
+                    <div class="field-group mb-4">
+                        <label for="debit" class="block text-gray-700">Debit:</label>
+                        <input type="text" id="debit" name="debit" class="border border-gray-400 rounded p-1 w-full" value="">
+                    </div>
+                    <div class="field-group mb-4">
+                        <label for="credit" class="block text-gray-700">Credit:</label>
+                        <input type="text" id="credit" name="credit" class="border border-gray-400 rounded p-1 w-full" value="">
+                    </div>
+                    <div class="field-group mb-4">
+                        <label for="payment" class="block text-gray-700">Payment:</label>
+                        <input type="text" id="payment" name="payment" class="border border-gray-400 rounded p-1 w-full" value="18,000.00">
+                    </div>
+                    <div class="field-group mb-4">
+                        <label for="balance" class="block text-gray-700">Balance:</label>
+                        <input type="text" id="balance" name="balance" class="border border-gray-400 rounded p-1 w-full" value="18,000.00">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

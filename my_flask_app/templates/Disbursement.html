@@ -77,12 +77,14 @@
         <div class="content flex-1">
             <div id="Request" class="tab active">
                 <h2 class="text-md font-semibold mb-4">Request Payment</h2>
+                {% include 'PaymentRequest.html' %}
             </div>
             <div id="Issuance" class="tab">
                 <h2 class="text-md font-semibold mb-4">Check Issuance</h2>
             </div>
             <div id="Clearing" class="tab">
                 <h2 class="text-md font-semibold mb-4">Check Clearing</h2>
+                {% include 'CheckClearing.html' %}
             </div>
         </div>
     </div>

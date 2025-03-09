@@ -1,0 +1,28 @@
+### Revised Plan for SQL Commands
+
+1. **Identify Entities and Fields**:
+   - **User Table**:
+     - Fields: `id`, `username`
+   - **Invoice Table**:
+     - Fields: `GroupID`, `InvoiceID`, `InvDate`, `InvType`, `ProjID`, `CustomerID`, `AccManID`, `LeadDiv`, `Remarks`, `IntTerms`, `CusTerms`, `PaymentType`, `ItemID`, `TPCContact`, `TPCGross`, `Gross`, `Returns`, `Payment`, `Debit`, `Credit`, `Balance`
+   - **Items Table**:
+     - Fields: `ItemID`, `ItemName`, `Status`, `Description`, `Accepted`, `Gross`, `Billed`, `Amount`
+   - **Checks Table** (Incorporating CheckClearing and CheckIssuance):
+     - Fields: `CheckID`, `CheckNumber`, `Amount`, `DateIssued`, `DateCleared`, `Status`, `RelatedInvoiceID`
+   - **Additional Tables**:
+     - Create tables for each of the following templates:
+       - `Disbursement`
+       - `InvoiceForm`
+       - `InvoiceReceipt`
+       - `PaymentRequest`
+       - `PurchaseOrder`
+       - `PurchaseReceiving`
+       - `PurchaseRequests`
+       - `Purchasing`
+       - `tabs`
+
+2. **Generate SQL Commands**:
+   - For each identified entity, create SQL commands to define the tables with the corresponding fields and data types, ensuring that the Checks table reflects the relationship with invoices.
+
+3. **Review and Confirm**:
+   - Present the generated SQL commands to the user for review and confirmation before finalizing.

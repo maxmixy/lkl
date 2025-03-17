@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from .models import Invoice, Items
+from .models import Invoice, Items, PurchaseRequest, PurchaseOrder, PurchaseReceiving, PaymentRequest, CheckIssuance
 
 from my_flask_app import db
 
@@ -166,9 +166,42 @@ def purchasing():
         # Add your form processing logic here
         flash('Form submitted successfully!', 'success')
         return redirect(url_for('views.purchasing'))
-    return render_template('Purchasing.html')
+
+    # Query data for Purchase Requests
+    purchase_requests = PurchaseRequest.query.all()  # Assuming a model named PurchaseRequest exists
+
+    # Query data for Purchase Orders
+    purchase_orders = PurchaseOrder.query.all()  # Assuming a model named PurchaseOrder exists
+
+    # Query data for Purchase Receiving
+    purchase_receiving = PurchaseReceiving.query.all()  # Assuming a model named PurchaseReceiving exists
+
+    return render_template('Purchasing.html', 
+                           purchase_requests=purchase_requests,
+                           purchase_orders=purchase_orders,
+                           purchase_receiving=purchase_receiving)
 
 
-@views.route('/disbursement')
+
+@views.route('/disbursement', methods=['GET', 'POST'])
 def disbursement():
-    return render_template('Disbursement.html')
+    if request.method == 'POST':
+        # Process form data here
+        form_data = request.form
+        # Add your form processing logic here
+        flash('Form submitted successfully!', 'success')
+        return redirect(url_for('views.disbursement'))
+
+    # Query data for Payment Requests
+    payment_requests = PaymentRequest.query.all()  # Assuming a model named PaymentRequest exists
+
+    # Query data for Check Issuance
+    check_issuance = CheckIssuance.query.all()  # Assuming a model named CheckIssuance exists
+
+    # Query data for Check Clearing
+    check_clearing = CheckClearing.query.all()  # Assuming a model named CheckClearing exists
+
+    return render_template('Disbursement.html', 
+                           payment_requests=payment_requests,
+                           check_issuance=check_issuance,
+                           check_clearing=check_clearing)

@@ -158,17 +158,44 @@ def sales_and_collection():
     return render_template('SalesAndCollection.html', current_index=current_index, invoices=invoices)
 
 
-@views.route('/purchasing', methods=['GET', 'POST'])
-def purchasing():
-    if request.method == 'POST':
-        # Process form data here
-        form_data = request.form
-        # Add your form processing logic here
-        flash('Form submitted successfully!', 'success')
-        return redirect(url_for('views.purchasing'))
+from datetime import datetime
 
+@views.route('/purchasing', methods=['GET', 'POST'])
+
+def purchasing():
+    date = datetime.now()
+    if request.method == 'POST':
+        request_id = request.form.get('request_id')
+        if request_id:
+            # Query the database for the corresponding record
+            purchase_request = PurchaseRequest.query.filter_by(request_id=request_id).first()
+
+            if purchase_request:
+                # Render the template with the found purchase request
+                # Insert the new purchase request into the database
+                
+                return redirect(url_for('views.purchasing'))
+
+            
+            
+            else:
+                new_request = PurchaseRequest(
+                    date=request.form['date'],
+                    type=request.form['type'],
+                    ref_no=request.form['ref_no'],
+                    date_needed=request.form['date_needed'],
+                    requested_by=request.form['requested_by'],
+                    department=request.form['department'],
+                    purpose=request.form['purpose'],
+                    remarks=request.form['remarks']
+                )
+                db.session.add(new_request)
+                db.session.commit()
+                flash('Purchase request submitted successfully!', 'success')
+                return render_template('Purchasing.html', error="No record found for the given Request ID.")
+    
     # Query data for Purchase Requests
-    purchase_requests = PurchaseRequest.query.all()  # Assuming a model named PurchaseRequest exists
+    purchase_request = PurchaseRequest.query.all()  # Assuming a model named PurchaseRequest exists
 
     # Query data for Purchase Orders
     purchase_orders = PurchaseOrder.query.all()  # Assuming a model named PurchaseOrder exists
@@ -177,9 +204,10 @@ def purchasing():
     purchase_receiving = PurchaseReceiving.query.all()  # Assuming a model named PurchaseReceiving exists
 
     return render_template('Purchasing.html', 
-                           purchase_requests=purchase_requests,
+                           purchase_request=purchase_request,
                            purchase_orders=purchase_orders,
-                           purchase_receiving=purchase_receiving)
+                           purchase_receiving=purchase_receiving, current_date=date)
+
 
 
 
@@ -199,7 +227,7 @@ def disbursement():
     check_issuance = CheckIssuance.query.all()  # Assuming a model named CheckIssuance exists
 
     # Query data for Check Clearing
-    check_clearing = CheckClearing.query.all()  # Assuming a model named CheckClearing exists
+    check_clearing = CheckIssuance.query.all()  # Assuming a model named CheckClearing exists
 
     return render_template('Disbursement.html', 
                            payment_requests=payment_requests,

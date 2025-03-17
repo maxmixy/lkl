@@ -10,51 +10,48 @@
     <div class="max-w-4xl mx-auto bg-white border border-gray-400 rounded-lg shadow-lg">
         
         <div class="p-4">
-            <form action="{{ url_for('views.purchasing') }}" method="POST">
-                
+            <form action="{{ url_for('views.purchasing') }}" method="POST"> 
                 <div class="grid grid-cols-3 gap-4 mb-4">
                     <div class="mb-4">
                         <label for="request_id" class="block text-gray-700">Request ID:</label>
-                        <input type="text" id="request_id" name="request_id" class="border border-gray-400 rounded p-1 w-full" required>
+                        <input type="text" id="request_id" name="request_id" class="border border-gray-400 rounded p-1 w-full">
                     </div>
                     <div class="mb-4">
                         <label for="date" class="block text-gray-700">Date:</label>
-                        <input type="date" id="date" name="date" class="border border-gray-400 rounded p-1 w-full" required>
+                        <input type="date" id="date" name="date" value="{{ current_date }}" class="border border-gray-400 rounded p-1 w-full">
                     </div>
                     <div class="mb-4">
                         <label for="type" class="block text-gray-700">Type:</label>
-                        <input type="type" id="type" name="type" class="border border-gray-400 rounded p-1 w-full" required>
+                        <select id="type" name="type" class="border border-gray-400 rounded p-1 w-full">
+                            <option value="For Project">For Project</option>
+                            <option value="For Office">For Office</option>
+                            <option value="For Pool">For Pool</option>
+                        </select>
                     </div>
                 </div>
                 <div>
                     <h1 class="text-lg">Purchase Request Information</h1>
+                    <div class="grid grid-cols-3 gap-4 mb-4">
                     <div class="mb-4">
                         <label for="ref_no" class="block text-gray-700">Reference No.</label>
-                        <input type="text" id="supplier_name" name="supplier_name" class="border border-gray-400 rounded p-1 w-full" required>
+                        <input type="text" id="ref_no" name="ref_no" class="border border-gray-400 rounded p-1 w-full" required>
                     </div>
                     <div class="mb-4">
-                        <label for="requestor" class="block text-gray-700">Requested by</label>
-                        <input type="text" id="item_description" name="item_description" class="border border-gray-400 rounded p-1 w-full" required>
+                        <label for="date_needed" class="block text-gray-700">Date Needed</label>
+                        <input type="date" id="date_needed" name="date_needed" class="border border-gray-400 rounded p-1 w-full" required>
+                    </div>
                     </div>
                     <div class="mb-4">
-                        <label for="quantity" class="block text-gray-700">Department</label>
-                        <input type="number" id="quantity" name="quantity" class="border border-gray-400 rounded p-1 w-full" required>
+                        <label for="requested_by" class="block text-gray-700">Requested by</label>
+                        <input type="text" id="requested_by" name="requested_by" class="border border-gray-400 rounded p-1 w-full" required>
                     </div>
                     <div class="mb-4">
-                        <label for="unit_price" class="block text-gray-700">Purpose</label>
-                        <input type="number" id="unit_price" name="unit_price" class="border border-gray-400 rounded p-1 w-full" required>
+                        <label for="department" class="block text-gray-700">Department</label>
+                        <input type="number" id="department" name="department" class="border border-gray-400 rounded p-1 w-full" required>
                     </div>
                     <div class="mb-4">
-                        <label for="total_price" class="block text-gray-700">Remarks</label>
-                        <input type="number" id="total_price" name="total_price" class="border border-gray-400 rounded p-1 w-full" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="status" class="block text-gray-700">Date Needed</label>
-                        <select id="status" name="status" class="border border-gray-400 rounded p-1 w-full">
-                            <option value="Pending">Pending</option>
-                            <option value="Approved">Approved</option>
-                            <option value="Rejected">Rejected</option>
-                        </select>
+                        <label for="purpose" class="block text-gray-700">Purpose</label>
+                        <input type="text" id="purpose" name="purpose" class="border border-gray-400 rounded p-1 w-full" required>
                     </div>
                     <div class="mb-4">
                         <label for="remarks" class="block text-gray-700">Remarks:</label>
@@ -73,7 +70,7 @@
                                     <th class="border border-gray-300 p-2">Product ID</th>
                                     <th class="border border-gray-300 p-2">Description</th>
                                     <th class="border border-gray-300 p-2">Unit</th>
-                                    <th class="border border-gray-300 p-2">Uantity</th>
+                                    <th class="border border-gray-300 p-2">Quantity</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -89,31 +86,11 @@
                                 {% endfor %}
                             </tbody>
                         </table>
-                        </div>
-                        <div class="border border-gray-300 p-4 mb-4">
-                            
-                        <table class="w-full text-sm">
-                            <thead>
-                                <tr class="bg-gray-200">
-                                    <th class="border border-gray-300 p-2">Project ID</th>
-                                    <th class="border border-gray-300 p-2">% Cont.</th>
-                                    <th class="border border-gray-300 p-2">Account Code</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for item in items %}
-                                <tr>
-                                        <td class="border border-gray-300 p-2">{{ item.ItemID }}</td>
-                                        <td class="border border-gray-300 p-2">{{ item.Description }}</td>
-                                        <td class="border border-gray-300 p-2">{{ item.Accepted }}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
                     </div>
                 </div>
-
-
+                <div class="mb-4">
+                    <button type="submit" class="bg-blue-500 text-white rounded p-2">Submit</button>
+                </div>
             </form>
         </div>
     </div>

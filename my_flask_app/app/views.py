@@ -155,7 +155,6 @@ def sales_and_collection():
                          payment=invoice_data.Payment if invoice_data else None,
                          balance=invoice_data.Balance if invoice_data else None)
 
-    return render_template('SalesAndCollection.html', current_index=current_index, invoices=invoices)
 
 
 from datetime import datetime
@@ -164,6 +163,8 @@ from datetime import datetime
 
 def purchasing():
     date = datetime.now()
+    date = date.strftime("%Y-%m-%d")
+    print("initial")
     if request.method == 'POST':
         request_id = request.form.get('request_id')
         if request_id:
@@ -173,36 +174,38 @@ def purchasing():
             if purchase_request:
                 # Render the template with the found purchase request
                 # Insert the new purchase request into the database
-                
+                print(date)
                 return redirect(url_for('views.purchasing'))
 
             
             
-            else:
-                new_request = PurchaseRequest(
-                    date=request.form['date'],
-                    type=request.form['type'],
-                    ref_no=request.form['ref_no'],
-                    date_needed=request.form['date_needed'],
-                    requested_by=request.form['requested_by'],
-                    department=request.form['department'],
-                    purpose=request.form['purpose'],
-                    remarks=request.form['remarks']
-                )
-                db.session.add(new_request)
-                db.session.commit()
-                flash('Purchase request submitted successfully!', 'success')
-                return render_template('Purchasing.html', error="No record found for the given Request ID.")
+        else:
+            print("insert")
+            new_request = PurchaseRequest(
+                date=request.form['date'],
+                type=request.form['type'],
+                ref_no=request.form['ref_no'],
+                date_needed=request.form['date_needed'],
+                requested_by=request.form['requested_by'],
+                department=request.form['department'],
+                purpose=request.form['purpose'],
+                remarks=request.form['remarks']
+            )
+            db.session.add(new_request)
+            db.session.commit()
+            flash('Purchase request submitted successfully!', 'success')
+            return render_template('Purchasing.html', error="No record found for the given Request ID.")
     
     # Query data for Purchase Requests
     purchase_request = PurchaseRequest.query.all()  # Assuming a model named PurchaseRequest exists
-
+    print(purchase_request)
     # Query data for Purchase Orders
     purchase_orders = PurchaseOrder.query.all()  # Assuming a model named PurchaseOrder exists
 
     # Query data for Purchase Receiving
     purchase_receiving = PurchaseReceiving.query.all()  # Assuming a model named PurchaseReceiving exists
-
+    
+    print("final")
     return render_template('Purchasing.html', 
                            purchase_request=purchase_request,
                            purchase_orders=purchase_orders,

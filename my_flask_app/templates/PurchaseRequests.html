@@ -14,7 +14,7 @@
                 <div class="grid grid-cols-3 gap-4 mb-4">
                     <div class="mb-4">
                         <label for="request_id" class="block text-gray-700">Request ID:</label>
-                        <input type="text" id="request_id" name="request_id" class="border border-gray-400 rounded p-1 w-full">
+                        <input type="text" id="request_id" name="request_id" class="border border-gray-400 rounded p-1 w-full" disabled>
                     </div>
                     <div class="mb-4">
                         <label for="date" class="block text-gray-700">Date:</label>
@@ -34,11 +34,11 @@
                     <div class="grid grid-cols-3 gap-4 mb-4">
                     <div class="mb-4">
                         <label for="ref_no" class="block text-gray-700">Reference No.</label>
-                        <input type="text" id="ref_no" name="ref_no" class="border border-gray-400 rounded p-1 w-full" required>
+                        <input type="text" id="ref_no" name="ref_no" class="border border-gray-400 rounded p-1 w-full" disabled>
                     </div>
                     <div class="mb-4">
                         <label for="date_needed" class="block text-gray-700">Date Needed</label>
-                        <input type="date" id="date_needed" name="date_needed" class="border border-gray-400 rounded p-1 w-full" required>
+                        <input type="date" id="date_needed" name="date_needed" value="{{ current_date }}" class="border border-gray-400 rounded p-1 w-full" required>
                     </div>
                     </div>
                     <div class="mb-4">
@@ -47,7 +47,7 @@
                     </div>
                     <div class="mb-4">
                         <label for="department" class="block text-gray-700">Department</label>
-                        <input type="number" id="department" name="department" class="border border-gray-400 rounded p-1 w-full" required>
+                        <input type="text" id="department" name="department" class="border border-gray-400 rounded p-1 w-full" required>
                     </div>
                     <div class="mb-4">
                         <label for="purpose" class="block text-gray-700">Purpose</label>
@@ -61,7 +61,7 @@
                 
                 <div>
                     <h1 class="text-lg">Details</h1>
-                    <div class="border border-gray-300 p-4 mb-4">
+                    <div class="border border-gray-300 p-4 mb-4" id="item-table">
                         <table class="w-full text-sm">
                             <thead>
                                 <tr class="bg-gray-200">
@@ -74,19 +74,62 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <tr class="item-row">
+                                    <td class="border border-gray-300 p-2"><input type="text" name="item_type[]" class="border border-gray-400 rounded p-1 w-full"></td>
+                                    <td class="border border-gray-300 p-2"><input type="text" name="product_type[]" class="border border-gray-400 rounded p-1 w-full"></td>
+                                    <td class="border border-gray-300 p-2"><input type="text" name="product_id[]" class="border border-gray-400 rounded p-1 w-full"></td>
+                                    <td class="border border-gray-300 p-2"><input type="text" name="description[]" class="border border-gray-400 rounded p-1 w-full"></td>
+                                    <td class="border border-gray-300 p-2"><input type="text" name="unit[]" class="border border-gray-400 rounded p-1 w-full"></td>
+                                    <td class="border border-gray-300 p-2"><input type="number" name="quantity[]" class="border border-gray-400 rounded p-1 w-full"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="border border-gray-300 p-4 mb-4" id="Account-table">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="bg-gray-200">
+                                    <th class="border border-gray-300 p-2">Project ID</th>
+                                    <th class="border border-gray-300 p-2">% Cont.</th>
+                                    <th class="border border-gray-300 p-2">Account Code</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                                 {% for item in items %}
                                 <tr>
                                         <td class="border border-gray-300 p-2">{{ item.ItemID }}</td>
                                         <td class="border border-gray-300 p-2">{{ item.Description }}</td>
                                         <td class="border border-gray-300 p-2">{{ item.Accepted }}</td>
-                                        <td class="border border-gray-300 p-2">{{ item.Gross }}</td>
-                                        <td class="border border-gray-300 p-2">{{ item.Billed }}</td>
-                                        <td class="border border-gray-300 p-2">{{ item.Amount }}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
                     </div>
+                    <script>
+                        const itemTable = document.getElementById('item-table');
+                        let debounceTimer;
+                    
+                        itemTable.addEventListener('input', function(event) {
+                            if (event.target.tagName === 'INPUT') {
+                                const lastRow = itemTable.querySelector('.item-row:last-child');
+                    
+                                if (lastRow.contains(event.target)) {
+                                    clearTimeout(debounceTimer); // Clear previous timer
+                    
+                                    debounceTimer = setTimeout(function() {
+                                        const inputs = lastRow.querySelectorAll('input');
+                                        const allFilled = Array.from(inputs).every(input => input.value.trim() !== '');
+                    
+                                        if (allFilled) {
+                                            const newRow = lastRow.cloneNode(true);
+                                            newRow.querySelectorAll('input').forEach(input => input.value = '');
+                                            itemTable.appendChild(newRow);
+                                        }
+                                    }, 300); // Delay in milliseconds (adjust as needed)
+                                }
+                            }
+                        });
+                    </script>
                 </div>
                 <div class="mb-4">
                     <button type="submit" class="bg-blue-500 text-white rounded p-2">Submit</button>

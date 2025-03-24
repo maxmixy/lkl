@@ -95,13 +95,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for item in items %}
                                 <tr>
-                                        <td class="border border-gray-300 p-2">{{ item.ItemID }}</td>
-                                        <td class="border border-gray-300 p-2">{{ item.Description }}</td>
-                                        <td class="border border-gray-300 p-2">{{ item.Accepted }}</td>
+                                    <td class="border border-gray-300 p-2"><input type="text" name="project_id" class="border border-gray-400 rounded p-1 w-full"></td>
+                                    <td class="border border-gray-300 p-2"><input type="text" name="number" class="border border-gray-400 rounded p-1 w-full"></td>
+                                    <td class="border border-gray-300 p-2"><input type="text" name="acc_code" class="border border-gray-400 rounded p-1 w-full"></td>
                                 </tr>
-                                {% endfor %}
                             </tbody>
                         </table>
                     </div>

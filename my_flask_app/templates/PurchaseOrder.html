@@ -27,11 +27,19 @@
                     <div class="grid grid-cols-3 gap-4 mb-4">
                         <div class="mb-4">
                             <label for="type" class="block text-gray-700">Type</label>
-                            <input type="text" id="type" name="type" class="border border-gray-400 rounded p-1 w-full" required>
-                        </div>
+                            <select id="type" name="type" class="border border-gray-400 rounded p-1 w-full">
+                                <option value="For Project">For Project</option>
+                                <option value="For Office">For Office</option>
+                                <option value="For Pool">For Pool</option>
+                            </select>
+                            </div>
                         <div class="mb-4">
-                            <label for="type" class="block text-gray-700">Product Type</label>
-                            <input type="text" id="type" name="type" class="border border-gray-400 rounded p-1 w-full" required>
+                            <label for="product_type" class="block text-gray-700">Product Type</label>
+                            <select id="terms" name="terms" class="border border-gray-400 rounded p-1 w-full">
+                                <option value="Assets">Assets</option>
+                                <option value="Supplies">Supplies</option>
+                                <option value="Inventory">Inventory</option>
+                            </select>                        
                         </div>
                         
                     </div>
@@ -49,8 +57,8 @@
                             </select>
                         </div>
                         <div class="col-span-2 mb-4">
-                            <label for="quantity" class="block text-gray-700">Address</label>
-                            <input type="number" id="quantity" name="quantity" class="border border-gray-400 rounded p-1 w-full" required>
+                            <label for="address" class="block text-gray-700">Address</label>
+                            <textarea type="text" id="address" name="address" class="border border-gray-400 rounded p-1 w-full" required></textarea>
                         </div>
                         <div class="col-start-3 row-start-2 mb-4">
                             <label for="currency" class="block text-gray-700">Currency</label>
@@ -65,8 +73,8 @@
                             <input type="number" id="unit_price" name="unit_price" class="border border-gray-400 rounded p-1 w-full" required>
                         </div>
                         <div class="mb-4">
-                            <label for="remarks" class="block text-gray-700">Currency Rate:</label>
-                            <input id="remarks" name="remarks" class="border border-gray-400 rounded p-1 w-full"></input>
+                            <label for="xrates" class="block text-gray-700">Currency Rate:</label>
+                            <input id="xrates" name="xrates" class="border border-gray-400 rounded p-1 w-full" value="1.00" disabled></input>
                         </div>
                         <div class="col-span-2 mb-4">
                             <label for="delivery_instructions" class="block text-gray-700">Delivery Instruction</label>
@@ -85,25 +93,25 @@
                         <table class="w-full text-sm">
                             <thead>
                                 <tr class="bg-gray-200">
+                                    <th class="border border-gray-300 p-2">Reference No.</th>
                                     <th class="border border-gray-300 p-2">Type</th>
                                     <th class="border border-gray-300 p-2">Product Type</th>
                                     <th class="border border-gray-300 p-2">Product ID</th>
                                     <th class="border border-gray-300 p-2">Description</th>
                                     <th class="border border-gray-300 p-2">Unit</th>
-                                    <th class="border border-gray-300 p-2">Uantity</th>
+                                    <th class="border border-gray-300 p-2">Quantity</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for item in items %}
                                 <tr>
-                                        <td class="border border-gray-300 p-2">{{ item.ItemID }}</td>
-                                        <td class="border border-gray-300 p-2">{{ item.Description }}</td>
-                                        <td class="border border-gray-300 p-2">{{ item.Accepted }}</td>
-                                        <td class="border border-gray-300 p-2">{{ item.Gross }}</td>
-                                        <td class="border border-gray-300 p-2">{{ item.Billed }}</td>
-                                        <td class="border border-gray-300 p-2">{{ item.Amount }}</td>
+                                    <td class="border border-gray-300 p-2"><input type="text" name="reference_no[]" class="border border-gray-400 rounded p-1 w-full"></td>
+                                    <td class="border border-gray-300 p-2"><input type="text" name="type[]" class="border border-gray-400 rounded p-1 w-full"></td>
+                                    <td class="border border-gray-300 p-2"><input type="text" name="product_type[]" class="border border-gray-400 rounded p-1 w-full"></td>
+                                    <td class="border border-gray-300 p-2"><input type="text" name="prod_id[]" class="border border-gray-400 rounded p-1 w-full"></td>
+                                    <td class="border border-gray-300 p-2"><input type="text" name="description[]" class="border border-gray-400 rounded p-1 w-full"></td>
+                                    <td class="border border-gray-300 p-2"><input type="text" name="unit[]" class="border border-gray-400 rounded p-1 w-full"></td>
+                                    <td class="border border-gray-300 p-2"><input type="text" name="quantity[]" class="border border-gray-400 rounded p-1 w-full"></td>
                                 </tr>
-                                {% endfor %}
                             </tbody>
                         </table>
                         </div>
@@ -118,13 +126,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for item in items %}
                                 <tr>
-                                        <td class="border border-gray-300 p-2">{{ item.ItemID }}</td>
-                                        <td class="border border-gray-300 p-2">{{ item.Description }}</td>
-                                        <td class="border border-gray-300 p-2">{{ item.Accepted }}</td>
+                                        <td class="border border-gray-300 p-2"><input type="text" name="proj_id" class="border border-gray-400 rounded p-1 w-full"></td>
+                                        <td class="border border-gray-300 p-2"><input type="text" name="cont" class="border border-gray-400 rounded p-1 w-full"></td>
+                                        <td class="border border-gray-300 p-2"><input type="text" name="account_code" class="border border-gray-400 rounded p-1 w-full"></td>
                                 </tr>
-                                {% endfor %}
                             </tbody>
                         </table>
                     </div>

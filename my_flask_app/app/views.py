@@ -158,29 +158,23 @@ def sales_and_collection():
 
 
 from datetime import datetime
+import requests
+
 
 @views.route('/purchasing', methods=['GET', 'POST'])
-
 def purchasing():
+    active_tab = request.form.get('activeTab')  # Get the active tab from the form data
+
+    print(active_tab)
+    purchase_request_details = None  # Initialize variable to hold purchase request details
+
     date = datetime.now()
     date = date.strftime("%Y-%m-%d")
-    print("initial")
-    if request.method == 'POST':
-        request_id = request.form.get('request_id')
-        if request_id:
-            # Query the database for the corresponding record
-            purchase_request = PurchaseRequest.query.filter_by(request_id=request_id).first()
+    if active_tab == 'purchase_request':
 
-            if purchase_request:
-                # Render the template with the found purchase request
-                # Insert the new purchase request into the database
-                print(date)
-                return redirect(url_for('views.purchasing'))
-
+        if request.method == 'POST':
             
-            
-        else:
-            print("insert")
+            print("purchreq")
             new_request = PurchaseRequest(
                 date=request.form['date'],
                 type=request.form['type'],
@@ -195,19 +189,44 @@ def purchasing():
             db.session.commit()
             flash('Purchase request submitted successfully!', 'success')
             return render_template('Purchasing.html', error="No record found for the given Request ID.")
-    
-    # Query data for Purchase Requests
-    purchase_request = PurchaseRequest.query.all()  # Assuming a model named PurchaseRequest exists
-    print(purchase_request)
+        
+    elif active_tab == 'purchase_order':
+        def get_currency_rates(base_currency='PHP'):
+            """
+            Fetch currency exchange rates from an external API.
+            
+            Args:
+                base_currency (str): The base currency to get rates for. Default is 'USD'.
+            
+            Returns:
+                dict: A dictionary containing currency rates.
+            """
+            api_url = f'https://api.exchangerate-api.com/v4/latest/{base_currency}'
+            try:
+                response = requests.get(api_url)
+                response.raise_for_status()  # Raise an error for bad responses
+                data = response.json()
+                return data['rates']  # Return the rates dictionary
+            except requests.exceptions.RequestException as e:
+                print(f"Error fetching currency rates: {e}")
+                return {}
+        print("purchorder")
+        currency_rates = get_currency_rates()  # Call the function to get currency rates
+        print(currency_rates)  # Print the fetched currency rates for debugging
+
+            
+    elif active_tab == 'purchase_receiving':
+        print("purcheceiving")
+                
     # Query data for Purchase Orders
     purchase_orders = PurchaseOrder.query.all()  # Assuming a model named PurchaseOrder exists
 
     # Query data for Purchase Receiving
     purchase_receiving = PurchaseReceiving.query.all()  # Assuming a model named PurchaseReceiving exists
     
-    print("final")
-    return render_template('Purchasing.html', 
-                           purchase_request=purchase_request,
+    return render_template('Purchasing.html',
+                           purchase_request_details=purchase_request_details,  # Pass the details to the template
+                           
                            purchase_orders=purchase_orders,
                            purchase_receiving=purchase_receiving, current_date=date)
 

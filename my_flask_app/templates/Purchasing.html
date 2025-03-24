@@ -52,6 +52,8 @@
     </style>
     <script>
         function showTab(tabId) {
+            localStorage.setItem('activeTab', tabId); // Store the active tab in local storage
+
             const tabs = document.querySelectorAll('.tab');
             tabs.forEach(tab => {
                 tab.classList.remove('active');
@@ -59,6 +61,15 @@
             document.getElementById(tabId).classList.add('active');
         }
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const activeTab = localStorage.getItem('activeTab');
+            if (activeTab) {
+                showTab(activeTab); // Show the tab that was previously active
+            }
+        });
+    </script>
+
 </head>
 <body class="bg-gray-200">
     <div class="flex">
@@ -69,13 +80,18 @@
         <div class="sidebar">
             <h1 class="text-lg font-bold">Purchasing</h1>
             <div class="mt-4">
-                <a onclick="showTab('Request')" >Request Purchase</a>
-                <a onclick="showTab('Order')" >Purchase Order</a>
-                <a onclick="showTab('Receiving')" >Purchase Receiving</a>
+                <a onclick="showTab('Request'); document.getElementById('activeTab').value='purchase_request';" >Request Purchase</a>
+                <a onclick="showTab('Order'); document.getElementById('activeTab').value='purchase_order';" >Purchase Order</a>
+
+                <a onclick="showTab('Receiving'); document.getElementById('activeTab').value='purchase_receiving';" >Purchase Receiving</a>
+
             </div>
         </div>
         <div class="content flex-1">
-            <div id="Request" class="tab active">
+            <form method="POST" action="/purchasing">
+                <input type="hidden" id="activeTab" name="activeTab" value="">
+            <div id="Request" class="tab"> 
+
                 <h2 class="text-md font-semibold mb-4">Request Purchase</h2>
                 {% include 'PurchaseRequests.html' %}
             </div>

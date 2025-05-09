@@ -172,7 +172,7 @@ def purchasing():
 
     # Query supplier data from the Supplier model
     suppliers = Supplier.query.all()
-
+    print(suppliers[0].attention)
     if active_tab == 'purchase_request':
 
         if request.method == 'POST':

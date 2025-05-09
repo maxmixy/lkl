@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from .models import Invoice, Items, PurchaseRequest, PurchaseOrder, PurchaseReceiving, PaymentRequest, CheckIssuance
+from .models import Invoice, Items, PurchaseRequest, PurchaseOrder, PurchaseReceiving, PaymentRequest, CheckIssuance, Supplier
 
 from my_flask_app import db
 
@@ -158,7 +158,6 @@ def sales_and_collection():
 
 
 from datetime import datetime
-import requests
 
 
 @views.route('/purchasing', methods=['GET', 'POST'])
@@ -170,10 +169,13 @@ def purchasing():
 
     date = datetime.now()
     date = date.strftime("%Y-%m-%d")
+
+    # Query supplier data from the Supplier model
+    suppliers = Supplier.query.all()
+
     if active_tab == 'purchase_request':
 
         if request.method == 'POST':
-            
             print("purchreq")
             new_request = PurchaseRequest(
                 date=request.form['date'],
@@ -188,32 +190,12 @@ def purchasing():
             db.session.add(new_request)
             db.session.commit()
             flash('Purchase request submitted successfully!', 'success')
-            return render_template('Purchasing.html', error="No record found for the given Request ID.")
-        
-    elif active_tab == 'purchase_order':
-        def get_currency_rates(base_currency='PHP'):
-            """
-            Fetch currency exchange rates from an external API.
-            
-            Args:
-                base_currency (str): The base currency to get rates for. Default is 'USD'.
-            
-            Returns:
-                dict: A dictionary containing currency rates.
-            """
-            api_url = f'https://api.exchangerate-api.com/v4/latest/{base_currency}'
-            try:
-                response = requests.get(api_url)
-                response.raise_for_status()  # Raise an error for bad responses
-                data = response.json()
-                return data['rates']  # Return the rates dictionary
-            except requests.exceptions.RequestException as e:
-                print(f"Error fetching currency rates: {e}")
-                return {}
-        print("purchorder")
-        currency_rates = get_currency_rates()  # Call the function to get currency rates
-        print(currency_rates)  # Print the fetched currency rates for debugging
+            return render_template('Purchasing.html', error="No record found for the given Request ID.", suppliers=suppliers)
 
+    elif active_tab == 'purchase_order':
+        
+        print("purchorder")
+        
             
     elif active_tab == 'purchase_receiving':
         print("purcheceiving")
@@ -226,7 +208,7 @@ def purchasing():
     
     return render_template('Purchasing.html',
                            purchase_request_details=purchase_request_details,  # Pass the details to the template
-                           
+                           suppliers=suppliers,  # Pass suppliers to the template
                            purchase_orders=purchase_orders,
                            purchase_receiving=purchase_receiving, current_date=date)
 
@@ -255,3 +237,13 @@ def disbursement():
                            payment_requests=payment_requests,
                            check_issuance=check_issuance,
                            check_clearing=check_clearing)
+
+@views.route('/get_supplier_info/<int:supplier_id>', methods=['GET'])
+def get_supplier_info(supplier_id):
+    supplier = Supplier.query.get(supplier_id)
+    if supplier:
+        return {
+            'address': supplier.address,
+            'attention': supplier.attention
+        }
+    return {'error': 'Supplier not found'}, 404

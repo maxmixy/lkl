@@ -45,8 +45,12 @@
                     </div>
                     <div class="grid grid-cols-3 gap-4 mb-4">
                         <div class="col-span-2 mb-4">
-                            <label for="requestor" class="block text-gray-700">Supplier</label>
-                            <input type="text" id="item_description" name="item_description" class="border border-gray-400 rounded p-1 w-full" required>
+                            <label for="supplier" class="block text-gray-700">Supplier</label>
+                            <select id="supplier" name="supplier" class="border border-gray-400 rounded p-1 w-full">
+                                {% for supplier in suppliers %}
+                                    <option value="{{ supplier.id }}">{{ supplier.name }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                         <div class="col-start-3 mb-4">
                             <label for="terms" class="block text-gray-700">Terms</label>
@@ -69,8 +73,8 @@
                             </select>
                         </div>
                         <div class="col-span-2 mb-4">
-                            <label for="unit_price" class="block text-gray-700">Attention</label>
-                            <input type="number" id="unit_price" name="unit_price" class="border border-gray-400 rounded p-1 w-full" required>
+                            <label for="attention" class="block text-gray-700">Attention</label>
+                            <input type="number" id="attention" name="attention" class="border border-gray-400 rounded p-1 w-full" required>
                         </div>
                         <div class="mb-4">
                             <label for="xrates" class="block text-gray-700">Currency Rate:</label>
@@ -140,5 +144,18 @@
             </form>
         </div>
     </div>
+    <script>
+        document.getElementById('supplier').addEventListener('change', function() {
+            const supplierId = this.value;
+
+            fetch(`/get_supplier_info/${supplierId}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('address').value = data.address;
+                    document.getElementById('attention').value = data.attention;
+                })
+                .catch(error => console.error('Error fetching supplier info:', error));
+        });
+    </script>
 </body>
 </html>

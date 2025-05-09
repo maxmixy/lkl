@@ -122,3 +122,11 @@ class CheckIssuance(db.Model):
     clearing_date = db.Column(db.Date, nullable=False)
     company = db.Column(db.String(255), nullable=False)
     total_gross = db.Column(db.Numeric(10, 2), nullable=True)
+
+
+class Supplier(db.Model):
+    __tablename__ = 'suppliers'
+    supplier_id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200), nullable=False)
+    address = db.Column(db.Text, nullable=False)
+    attention = db.Column(db.String(200), nullable=False)

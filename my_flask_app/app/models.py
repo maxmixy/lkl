@@ -2,12 +2,16 @@ from my_flask_app import db
 
 from datetime import datetime
 
-class Employee(db.Model):
+class Users(db.Model):
 
-    employee_id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(100), nullable=False)
-    last_name = db.Column(db.String(100), nullable=False)
-    position = db.Column(db.Integer, nullable=True)
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(255), unique=True, nullable=False)
+    first_name = db.Column(db.String(30), nullable=False)
+    last_name = db.Column(db.String(30), nullable=False)
+    position = db.Column(db.String(30), nullable=True)
+    department = db.Column(db.String(20), nullable=True)
+    position = db.Column(db.String(40), nullable=True)
+    password = db.Column(db.String(50), nullable=False)
 
 
 class Invoice(db.Model):
@@ -56,6 +60,18 @@ class PurchaseRequest(db.Model):
     remarks = db.Column(db.Text, nullable=True)
     request_status = db.Column(db.String(100), nullable=False)
     date_needed = db.Column(db.Date, nullable=False)
+
+class PurchaseRequestItems(db.Model):
+    __tablename__ = 'purchaserequestitems'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    ref_no = db.Column(db.String(100), db.ForeignKey('purchaserequests.ref_no'), nullable=False)
+    product_id = db.Column(db.Integer, nullable=False)
+    product_name = db.Column(db.String(50), nullable=False)
+    item_type = db.Column(db.String(50), nullable=True)
+    product_type = db.Column(db.String(50), nullable=True)
+    description = db.Column(db.String(255), nullable=True)
+    unit = db.Column(db.String(20), nullable=True)
+    quantity = db.Column(db.Integer, nullable=False)
 
 class PurchaseOrder(db.Model):
     __tablename__ = 'purchaseorder'
@@ -130,3 +146,13 @@ class Supplier(db.Model):
     name = db.Column(db.String(200), nullable=False)
     address = db.Column(db.Text, nullable=False)
     attention = db.Column(db.String(200), nullable=False)
+
+class Product(db.Model):
+    __tablename__ = 'products'
+    product_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    product_name = db.Column(db.String(50), nullable=False)
+    type = db.Column(db.String(50), nullable=True)
+    product_type = db.Column(db.String(50), nullable=True)
+    description = db.Column(db.String(255), nullable=True)
+    unit = db.Column(db.String(20), nullable=True)
+    quantity = db.Column(db.Integer, nullable=True)

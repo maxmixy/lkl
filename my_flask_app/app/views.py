@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from .models import Invoice, Items, PurchaseRequest, PurchaseOrder, PurchaseReceiving, PaymentRequest, CheckIssuance, Supplier
 
 from my_flask_app import db
@@ -8,7 +8,12 @@ views = Blueprint('views', __name__)
 
 @views.route('/')
 def index():
-    return render_template('index.html') 
+    return render_template('login.html') 
+
+@views.route('/home')   
+def home():
+    print('Session:', session)
+    return render_template('index.html')
 
 @views.route('/invoice', methods=['GET', 'POST'])
 def invoice():
@@ -160,11 +165,71 @@ def sales_and_collection():
 from datetime import datetime
 
 
+@views.route('/purchasing/purchase_request', methods=['POST'])
+def submit_purchase_request():
+    suppliers = Supplier.query.all()
+    active_tab = 'purchase_request'
+
+    # Compute new ref_no as the largest ref_no + 1
+    from .models import PurchaseRequestItems, PurchaseRequest
+    last_ref = db.session.query(PurchaseRequest.ref_no).order_by(PurchaseRequest.ref_no.desc()).first()
+    try:
+        new_ref_no = str(int(last_ref[0]) + 1) if last_ref and last_ref[0] and last_ref[0].isdigit() else '1'
+    except Exception:
+        new_ref_no = '1'
+    ref_no = new_ref_no
+
+    # Get all product details from the form
+    product_ids = request.form.getlist('product_id[]')
+    product_names = request.form.getlist('product_name[]')
+    item_types = request.form.getlist('item_type[]')
+    product_types = request.form.getlist('product_type[]')
+    descriptions = request.form.getlist('description[]')
+    units = request.form.getlist('unit[]')
+    quantities = request.form.getlist('quantity[]')
+
+    # Insert items into purchaserequestitems first
+    for i in range(len(product_ids)):
+        if product_ids[i] and product_names[i]:
+            item = PurchaseRequestItems(
+                ref_no=ref_no,
+                product_id=product_ids[i],
+                product_name=product_names[i],
+                item_type=item_types[i],
+                product_type=product_types[i],
+                description=descriptions[i],
+                unit=units[i],
+                quantity=quantities[i]
+            )
+            db.session.add(item)
+    db.session.flush()  # Ensure items are staged before the request
+
+    # Now insert the purchase request record
+    new_request = PurchaseRequest(
+        request_date=request.form['date'],
+        request_type=request.form['type'],
+        date_needed=request.form['date_needed'],
+        requestor=request.form['requested_by'],
+        department=request.form['department'],
+        purpose=request.form['purpose'],
+        remarks=request.form['remarks'],
+        ref_no=ref_no,
+        request_status='Approved'
+    )
+    db.session.add(new_request)
+    db.session.commit()
+    flash(f'Purchase request submitted successfully! Reference No: {ref_no}', 'success')
+    return redirect(url_for('views.purchasing', activeTab=active_tab))
+
 @views.route('/purchasing', methods=['GET', 'POST'])
 def purchasing():
-    active_tab = request.form.get('activeTab')  # Get the active tab from the form data
+    if request.method == 'POST':
+        active_tab = request.form.get('activeTab')
+    else:
+        active_tab = request.args.get('activeTab')
 
     print(active_tab)
+    flash(f"Active Tab: {active_tab}", 'info')
     purchase_request_details = None  # Initialize variable to hold purchase request details
 
     date = datetime.now()
@@ -172,47 +237,44 @@ def purchasing():
 
     # Query supplier data from the Supplier model
     suppliers = Supplier.query.all()
-    print(suppliers[0].attention)
-    if active_tab == 'purchase_request':
 
-        if request.method == 'POST':
-            print("purchreq")
-            new_request = PurchaseRequest(
-                date=request.form['date'],
-                type=request.form['type'],
-                ref_no=request.form['ref_no'],
-                date_needed=request.form['date_needed'],
-                requested_by=request.form['requested_by'],
-                department=request.form['department'],
-                purpose=request.form['purpose'],
-                remarks=request.form['remarks']
-            )
-            db.session.add(new_request)
-            db.session.commit()
-            flash('Purchase request submitted successfully!', 'success')
-            return render_template('Purchasing.html', error="No record found for the given Request ID.", suppliers=suppliers)
+    # Query products for the purchase request dropdown
+    from .models import Product, PurchaseRequest
+    products = Product.query.all()
+    products_dicts = []
+    for p in products:
+        products_dicts.append({
+            'product_id': p.product_id,
+            'product_name': p.product_name,
+            'type': p.type,
+            'product_type': p.product_type,
+            'description': p.description,
+            'unit': p.unit,
+            'quantity': p.quantity
+        })
 
-    elif active_tab == 'purchase_order':
-        
+    # Query reference_nos for purchase order dropdown (filterable)
+    reference_nos = db.session.query(
+        PurchaseRequest.ref_no,
+        PurchaseRequest.request_type.label('type'),
+        PurchaseRequest.purpose.label('product_type'),
+        PurchaseRequest.department.label('supplier_id')
+    ).all()
+
+    # Remove the purchase_request POST logic from here
+    if active_tab == 'purchase_order':
         print("purchorder")
-        
-            
     elif active_tab == 'purchase_receiving':
         print("purcheceiving")
-                
     # Query data for Purchase Orders
     purchase_orders = PurchaseOrder.query.all()  # Assuming a model named PurchaseOrder exists
-
     # Query data for Purchase Receiving
     purchase_receiving = PurchaseReceiving.query.all()  # Assuming a model named PurchaseReceiving exists
-    
     return render_template('Purchasing.html',
                            purchase_request_details=purchase_request_details,  # Pass the details to the template
                            suppliers=suppliers,  # Pass suppliers to the template
                            purchase_orders=purchase_orders,
-                           purchase_receiving=purchase_receiving, current_date=date)
-
-
+                           purchase_receiving=purchase_receiving, current_date=date, active_tab=active_tab, products=products_dicts, reference_nos=reference_nos)
 
 
 @views.route('/disbursement', methods=['GET', 'POST'])
@@ -247,3 +309,24 @@ def get_supplier_info(supplier_id):
             'attention': supplier.attention
         }
     return {'error': 'Supplier not found'}, 404
+
+@views.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        from .models import db, Users
+        user = Users.query.filter_by(username=username).first()
+        
+        if user and hasattr(user, 'password') and user.password == password:
+            flash('Login successful!', 'success')
+            # Set user info in session
+            session['first_name'] = user.first_name
+            session['last_name'] = user.last_name
+            session['department'] = user.department
+            session['position'] = user.position
+            return redirect(url_for('views.home'))
+        else:
+            flash('Invalid username or password.', 'error')
+            return render_template('login.html')
+    return render_template('login.html')

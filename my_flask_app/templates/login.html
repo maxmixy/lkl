@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded shadow-md w-full max-w-sm">
+        <h2 class="text-2xl font-bold mb-6 text-center">Popmart Sales Management System</h2>
+        <h2 class="text-xl mb-6 text-center">Login here</h2>
+        <!-- {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <ul class="mb-4">
+              {% for category, message in messages %}
+                <li class="text-{{ 'red-500' if category == 'error' else 'green-600' }} text-sm">{{ message }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %} -->
+        <form method="POST" action="{{ url_for('views.login') }}">
+            <div class="mb-4">
+                <label for="username" class="block text-gray-700">Username</label>
+                <input type="text" id="username" name="username" required class="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300">
+            </div>
+            <div class="mb-6">
+                <label for="password" class="block text-gray-700">Password</label>
+                <input type="password" id="password" name="password" required class="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300">
+            </div>
+            <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">Login</button>
+        </form>
+    </div>
+</body>
+</html>

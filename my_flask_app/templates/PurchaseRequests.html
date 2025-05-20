@@ -7,10 +7,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-200 p-4">
-    <div class="max-w-4xl mx-auto bg-white border border-gray-400 rounded-lg shadow-lg">
+    <div class="max-w-5xl mx-auto bg-white border border-gray-400 rounded-lg shadow-lg">
         
         <div class="p-4">
-            <form action="{{ url_for('views.purchasing') }}" method="POST"> 
+            <form action="{{ url_for('views.submit_purchase_request') }}" method="POST"> 
                 <div class="grid grid-cols-3 gap-4 mb-4">
                     <div class="mb-4">
                         <label for="request_id" class="block text-gray-700">Request ID:</label>
@@ -18,7 +18,7 @@
                     </div>
                     <div class="mb-4">
                         <label for="date" class="block text-gray-700">Date:</label>
-                        <input type="date" id="date" name="date" value="{{ current_date }}" class="border border-gray-400 rounded p-1 w-full">
+                        <input type="date" id="date" name="date" value="{{ current_date }}" class="border border-gray-400 rounded p-1 w-full" readonly>
                     </div>
                     <div class="mb-4">
                         <label for="type" class="block text-gray-700">Type:</label>
@@ -43,11 +43,11 @@
                     </div>
                     <div class="mb-4">
                         <label for="requested_by" class="block text-gray-700">Requested by</label>
-                        <input type="text" id="requested_by" name="requested_by" class="border border-gray-400 rounded p-1 w-full" required>
+                        <input type="text" id="requested_by" name="requested_by" class="border border-gray-400 rounded p-1 w-full" required value="{{ session.get('first_name', '') }} {{ session.get('last_name', '') }}" readonly>
                     </div>
                     <div class="mb-4">
                         <label for="department" class="block text-gray-700">Department</label>
-                        <input type="text" id="department" name="department" class="border border-gray-400 rounded p-1 w-full" required>
+                        <input type="text" id="department" name="department" class="border border-gray-400 rounded p-1 w-full" required value="{{ session.get('department', '') }}" readonly>
                     </div>
                     <div class="mb-4">
                         <label for="purpose" class="block text-gray-700">Purpose</label>
@@ -65,9 +65,10 @@
                         <table class="w-full text-sm">
                             <thead>
                                 <tr class="bg-gray-200">
+                                    <th class="border border-gray-300 p-2">Product ID</th>
+                                    <th class="border border-gray-300 p-2">Product Name</th>
                                     <th class="border border-gray-300 p-2">Type</th>
                                     <th class="border border-gray-300 p-2">Product Type</th>
-                                    <th class="border border-gray-300 p-2">Product ID</th>
                                     <th class="border border-gray-300 p-2">Description</th>
                                     <th class="border border-gray-300 p-2">Unit</th>
                                     <th class="border border-gray-300 p-2">Quantity</th>
@@ -75,11 +76,19 @@
                             </thead>
                             <tbody>
                                 <tr class="item-row">
-                                    <td class="border border-gray-300 p-2"><input type="text" name="item_type[]" class="border border-gray-400 rounded p-1 w-full"></td>
-                                    <td class="border border-gray-300 p-2"><input type="text" name="product_type[]" class="border border-gray-400 rounded p-1 w-full"></td>
-                                    <td class="border border-gray-300 p-2"><input type="text" name="product_id[]" class="border border-gray-400 rounded p-1 w-full"></td>
-                                    <td class="border border-gray-300 p-2"><input type="text" name="description[]" class="border border-gray-400 rounded p-1 w-full"></td>
-                                    <td class="border border-gray-300 p-2"><input type="text" name="unit[]" class="border border-gray-400 rounded p-1 w-full"></td>
+                                    <td class="border border-gray-300 p-2"><input type="text" name="product_id[]" class="border border-gray-400 rounded p-1 w-full" readonly></td>
+                                    <td class="border border-gray-300 p-2">
+                                        <select name="product_name[]" class="border border-gray-400 rounded p-1 w-full product-name-select">
+                                            <option value=""></option>
+                                            {% for product in products %}
+                                            <option value="{{ product.product_name }}" data-product='{{ product | tojson }}'>{{ product.product_name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td class="border border-gray-300 p-2"><input type="text" name="item_type[]" class="border border-gray-400 rounded p-1 w-full item-type-input" readonly></td>
+                                    <td class="border border-gray-300 p-2"><input type="text" name="product_type[]" class="border border-gray-400 rounded p-1 w-full product-type-input" readonly></td>
+                                    <td class="border border-gray-300 p-2"><input type="text" name="description[]" class="border border-gray-400 rounded p-1 w-full description-input" readonly></td>
+                                    <td class="border border-gray-300 p-2"><input type="text" name="unit[]" class="border border-gray-400 rounded p-1 w-full unit-input" readonly></td>
                                     <td class="border border-gray-300 p-2"><input type="number" name="quantity[]" class="border border-gray-400 rounded p-1 w-full"></td>
                                 </tr>
                             </tbody>
@@ -121,9 +130,28 @@
                                         if (allFilled) {
                                             const newRow = lastRow.cloneNode(true);
                                             newRow.querySelectorAll('input').forEach(input => input.value = '');
-                                            itemTable.appendChild(newRow);
+                                            // Reset selects in the new row
+                                            newRow.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
+                                            // Append the new row to the tbody, not the table div
+                                            lastRow.parentNode.appendChild(newRow);
                                         }
                                     }, 300); // Delay in milliseconds (adjust as needed)
+                                }
+                            }
+                        });
+
+                        // Make product name a searchable dropdown using event delegation
+                        itemTable.addEventListener('change', function(e) {
+                            if (e.target.classList.contains('product-name-select')) {
+                                const selectedOption = e.target.options[e.target.selectedIndex];
+                                if (selectedOption && selectedOption.dataset.product) {
+                                    const product = JSON.parse(selectedOption.dataset.product);
+                                    const row = e.target.closest('tr');
+                                    row.querySelector('input[name="product_id[]"]').value = product.product_id || '';
+                                    row.querySelector('input[name="item_type[]"]').value = product.type || '';
+                                    row.querySelector('input[name="product_type[]"]').value = product.product_type || '';
+                                    row.querySelector('input[name="description[]"]').value = product.description || '';
+                                    row.querySelector('input[name="unit[]"]').value = product.unit || '';
                                 }
                             }
                         });

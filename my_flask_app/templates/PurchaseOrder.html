@@ -98,9 +98,10 @@
                             <thead>
                                 <tr class="bg-gray-200">
                                     <th class="border border-gray-300 p-2">Reference No.</th>
+                                    <th class="border border-gray-300 p-2">Product ID</th>
+                                    <th class="border border-gray-300 p-2">Product Name</th>
                                     <th class="border border-gray-300 p-2">Type</th>
                                     <th class="border border-gray-300 p-2">Product Type</th>
-                                    <th class="border border-gray-300 p-2">Product ID</th>
                                     <th class="border border-gray-300 p-2">Description</th>
                                     <th class="border border-gray-300 p-2">Unit</th>
                                     <th class="border border-gray-300 p-2">Quantity</th>
@@ -108,10 +109,20 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td class="border border-gray-300 p-2"><input type="text" name="reference_no[]" class="border border-gray-400 rounded p-1 w-full"></td>
+                                    <td class="border border-gray-300 p-2">
+                                        <select name="reference_no[]" class="border border-gray-400 rounded p-1 w-full" id="reference_no_select">
+                                            <option value=""></option>
+                                            {% if reference_nos %}
+                                            {% for ref in reference_nos %}
+                                            <option value="{{ ref.ref_no }}" data-type="{{ ref.type }}" data-product_type="{{ ref.product_type }}" data-supplier="{{ ref.supplier_id }}">{{ ref.ref_no }}</option>
+                                            {% endfor %}
+                                            {% endif %}
+                                        </select>
+                                    </td>
+                                    <td class="border border-gray-300 p-2"><input type="text" name="prod_id[]" class="border border-gray-400 rounded p-1 w-full"></td>
+                                    <td class="border border-gray-300 p-2"><input type="text" name="prod_name[]" class="border border-gray-400 rounded p-1 w-full"></td>
                                     <td class="border border-gray-300 p-2"><input type="text" name="type[]" class="border border-gray-400 rounded p-1 w-full"></td>
                                     <td class="border border-gray-300 p-2"><input type="text" name="product_type[]" class="border border-gray-400 rounded p-1 w-full"></td>
-                                    <td class="border border-gray-300 p-2"><input type="text" name="prod_id[]" class="border border-gray-400 rounded p-1 w-full"></td>
                                     <td class="border border-gray-300 p-2"><input type="text" name="description[]" class="border border-gray-400 rounded p-1 w-full"></td>
                                     <td class="border border-gray-300 p-2"><input type="text" name="unit[]" class="border border-gray-400 rounded p-1 w-full"></td>
                                     <td class="border border-gray-300 p-2"><input type="text" name="quantity[]" class="border border-gray-400 rounded p-1 w-full"></td>
@@ -156,6 +167,56 @@
                 })
                 .catch(error => console.error('Error fetching supplier info:', error));
         });
+
+        // Fetch and update currency rate when currency changes
+        document.getElementById('currency').addEventListener('change', function() {
+            const currency = this.value;
+            let base = 'USD';
+            let target = 'PHP';
+            if (currency === 'Php') {
+                document.getElementById('xrates').value = '1.00';
+                return;
+            } else if (currency === 'Usd') {
+                base = 'USD';
+            } else if (currency === 'Cny') {
+                base = 'CNY';
+            }
+            fetch(`https://api.exchangerate.host/convert?access_key=90bdd2db933e06b678d70b1aad2a2f93&from=${base}&to=PHP&amount=1`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.result) {
+                        document.getElementById('xrates').value = data.result.toFixed(2);
+                    } else {
+                        document.getElementById('xrates').value = '';
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('xrates').value = '';
+                    console.error('Error fetching exchange rate:', error);
+                });
+        });
+
+        // Filtering Reference No. dropdown by type, product type, and supplier
+        function filterReferenceNos() {
+            const type = document.getElementById('type').value;
+            const productType = document.getElementById('terms').value;
+            const supplier = document.getElementById('supplier').value;
+            const refSelect = document.getElementById('reference_no_select');
+            Array.from(refSelect.options).forEach(option => {
+                if (!option.value) return; // skip placeholder
+                const match = (
+                    (!type || option.dataset.type === type) &&
+                    (!productType || option.dataset.product_type === productType) &&
+                    (!supplier || option.dataset.supplier === supplier)
+                );
+                option.style.display = match ? '' : 'none';
+            });
+        }
+        document.getElementById('type').addEventListener('change', filterReferenceNos);
+        document.getElementById('terms').addEventListener('change', filterReferenceNos);
+        document.getElementById('supplier').addEventListener('change', filterReferenceNos);
+        // Initial filter on page load
+        filterReferenceNos();
     </script>
 </body>
 </html>

@@ -54,19 +54,32 @@
         function showTab(tabId) {
             localStorage.setItem('activeTab', tabId); // Store the active tab in local storage
 
+            // Set the hidden input value based on tab
+            let tabValue = '';
+            if (tabId === 'Request') tabValue = 'purchase_request';
+            else if (tabId === 'Order') tabValue = 'purchase_order';
+            else if (tabId === 'Receiving') tabValue = 'purchase_receiving';
+            var activeTabInput = document.getElementById('activeTab');
+            if (activeTabInput) activeTabInput.value = tabValue;
+
             const tabs = document.querySelectorAll('.tab');
             tabs.forEach(tab => {
                 tab.classList.remove('active');
             });
             document.getElementById(tabId).classList.add('active');
         }
-    </script>
-    <script>
         document.addEventListener('DOMContentLoaded', (event) => {
-            const activeTab = localStorage.getItem('activeTab');
-            if (activeTab) {
-                showTab(activeTab); // Show the tab that was previously active
-            }
+            // Use the value from Flask if present, else fallback to localStorage or 'Request'
+            const flaskActiveTab = "{{ active_tab|default('') }}";
+            const activeTab = flaskActiveTab || localStorage.getItem('activeTab') || 'Request';
+            showTab(activeTab);
+
+            // Listen for page navigation (popstate) to re-apply the active tab
+            window.addEventListener('popstate', function() {
+                const flaskActiveTab = "{{ active_tab|default('') }}";
+                const activeTab = flaskActiveTab || localStorage.getItem('activeTab') || 'Request';
+                showTab(activeTab);
+            });
         });
     </script>
 
@@ -80,15 +93,13 @@
         <div class="sidebar">
             <h1 class="text-lg font-bold">Purchasing</h1>
             <div class="mt-4">
-                <a onclick="showTab('Request'); document.getElementById('activeTab').value='purchase_request';" >Request Purchase</a>
-                <a onclick="showTab('Order'); document.getElementById('activeTab').value='purchase_order';" >Purchase Order</a>
-
-                <a onclick="showTab('Receiving'); document.getElementById('activeTab').value='purchase_receiving';" >Purchase Receiving</a>
-
+                <a href="javascript:void(0);" onclick="showTab('Request');">Request Purchase</a>
+                <a href="javascript:void(0);" onclick="showTab('Order');">Purchase Order</a>
+                <a href="javascript:void(0);" onclick="showTab('Receiving');">Purchase Receiving</a>
             </div>
         </div>
         <div class="content flex-1">
-            <form method="POST" action="/purchasing">
+            <form method="POST" action="/purchasing/purchase_request">
                 <input type="hidden" id="activeTab" name="activeTab" value="">
             <div id="Request" class="tab"> 
 
